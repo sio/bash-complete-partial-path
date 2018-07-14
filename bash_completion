@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+#
+# Zsh-like expansion of incomplete file paths for Bash.
+# Source this file from your ~/.bashrc to enable the described behavior.
+#
+# Example: `/u/s/a<Tab>` will be expanded into `/usr/share/applications`
+#
+
+
+# Copyright 2018 Vitaly Potyarkin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+
+
+#
+# Take a single incomplete path and fill it with wildcards
+# e.g. /u/s/app/ -> /u*/s*/app*
+#
+_put_wildcards_into_path() {
+    local PROCESSED TILDE_EXPANSION
+    PROCESSED=$( \
+        echo "$@" | \
+        sed \
+            -e 's:\([^\*\~]\)/:\1*/:g' \
+            -e 's:\([^\/\*]\)$:\1*:g' \
+            -e 's:\/$::g' \
+            -e 's:^\(\~[^\/]*\)\*\/:\1/:' \
+            -Ee 's:(\.+)\*/:\1/:g' \
+    )
+    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|sed -e 's:^\\\~:~:g')"
+    echo "$TILDE_EXPANSION"
+}
+
+
+#
+# Bash completion function for expanding partial paths
+#
+# This is a generic worker. It accepts 'file' or 'directory' as the first
+# argument to specify desired completion behavior
+#
+_complete_partial() {
+    local WILDCARDS ACTION LINE OPTION INPUT UNQUOTED_INPUT QUOTE
+
+    ACTION="$1"
+    if [[ "_$1" == "_-d" ]]
+    then  # _filedir compatibility
+        ACTION="directory"
+    fi
+    INPUT="${COMP_WORDS[$COMP_CWORD]}"
+
+    # Detect and strip opened quotes
+    if [[ "${INPUT:0:1}" == "'" || "${INPUT:0:1}" == '"' ]]
+    then
+        QUOTE="${INPUT:0:1}"
+        INPUT="${INPUT:1}"
+    else
+        QUOTE=""
+    fi
+
+    # Add wildcards to each path element
+    WILDCARDS=$(_put_wildcards_into_path "$INPUT")
+
+    # Collect completion options
+    COMPREPLY=()
+    while read -r -d $'\n' LINE
+    do
+        if [[ "_$ACTION" == "_directory" && ! -d "$LINE" ]]
+        then  # skip non-directory paths when looking for directory
+            continue
+        fi
+        if [[ -z "$LINE" ]]
+        then  # skip empty suggestions
+            continue
+        fi
+        if [[ -z "$QUOTE"  ]]
+        then  # escape special characters unless user has opened a quote
+            LINE=$(printf "%q" "$LINE")
+        fi
+        COMPREPLY+=("$LINE")
+    done <<< $(compgen -G "$WILDCARDS" "$WILDCARDS" 2>/dev/null)
+    return 0  # do not clutter $? value (last exit code)
+}
+
+
+# Wrappers
+_complete_partial_dir() { _complete_partial directory; }
+_complete_partial_file() { _complete_partial file; }
+
+# Enable enhanced completion
+complete -o bashdefault -o default -o nospace -D -F _complete_partial_file
+
+# Optional. Make sure `cd` is autocompleted only with directories
+complete -o bashdefault -o default -o nospace -F _complete_partial_dir cd
+
+# Override bash-completion's _filedir (if it's in use)
+# https://salsa.debian.org/debian/bash-completion
+_filedir_original_code=$(declare -f _filedir|tail -n+2)
+if [[ ! -z "$_filedir_original_code" ]]
+then
+    eval "_filedir_original() $_filedir_original_code"
+    _filedir() {
+        _filedir_original "$@"
+        _complete_partial "$@"
+    }
+fi
+
+# Readline configuration for better user experience
+bind 'TAB:menu-complete'
+bind 'set colored-completion-prefix on'
+bind 'set colored-stats on'
+bind 'set completion-ignore-case on'
+bind 'set menu-complete-display-prefix on'
+bind 'set show-all-if-ambiguous on'
+bind 'set show-all-if-unmodified on'
