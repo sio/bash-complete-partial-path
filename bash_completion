@@ -74,6 +74,7 @@ _complete_partial() {
 
     # Collect completion options
     COMPREPLY=()
+    compopt -o nospace
     while read -r -d $'\n' LINE
     do
         if [[ "_$ACTION" == "_directory" && ! -d "$LINE" ]]
