@@ -35,7 +35,6 @@ _put_wildcards_into_path() {
         sed \
             -e 's:\([^\*\~]\)/:\1*/:g' \
             -e 's:\([^\/\*]\)$:\1*:g' \
-            -e 's:\/$::g' \
             -e 's:^\(\~[^\/]*\)\*\/:\1/:' \
             -Ee 's:(\.+)\*/:\1/:g' \
     )
@@ -69,12 +68,29 @@ _complete_partial() {
         QUOTE=""
     fi
 
+    # Prepare the reply
+    COMPREPLY=()
+    compopt -o nospace
+    compopt -o bashdefault
+    compopt -o default
+
+    # If input is already a valid path, do not try to be clever
+    if [[ -e "$INPUT" ]]
+    then
+        if [[ "_$ACTION" == "_directory" ]]
+        then
+            OPTION="dirnames"
+        else
+            OPTION="filenames"
+        fi
+        COMPREPLY=($(compgen -o "$OPTION" "$INPUT"))
+        return
+    fi
+
     # Add wildcards to each path element
     WILDCARDS=$(_put_wildcards_into_path "$INPUT")
 
     # Collect completion options
-    COMPREPLY=()
-    compopt -o nospace
     while read -r -d $'\n' LINE
     do
         if [[ "_$ACTION" == "_directory" && ! -d "$LINE" ]]
