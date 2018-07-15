@@ -115,6 +115,15 @@ then
         _complete_partial "$@"
     }
 fi
+_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
+if [[ ! -z "$_filedir_xspec_original_code" ]]
+then
+    eval "_filedir_xspec_original() $_filedir_xspec_original_code"
+    _filedir_xspec() {
+        _filedir_xspec_original "$@"
+        _complete_partial "$@"
+    }
+fi
 
 # Readline configuration for better user experience
 bind 'TAB:menu-complete'
