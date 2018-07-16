@@ -29,9 +29,10 @@
 # e.g. /u/s/app/ -> /u*/s*/app*
 #
 _put_wildcards_into_path() {
-    local PROCESSED TILDE_EXPANSION
+    local PROCESSED TILDE_EXPANSION INPUT
+    INPUT="$@"
     PROCESSED=$( \
-        echo "$@" | \
+        echo "$INPUT" | \
         sed \
             -e 's:\([^\*\~]\)/:\1*/:g' \
             -e 's:\([^\/\*]\)$:\1*:g' \
@@ -39,6 +40,14 @@ _put_wildcards_into_path() {
             -Ee 's:(\.+)\*/:\1/:g' \
     )
     eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|sed -e 's:^\\\~:~:g')"
+
+    # Workaround for Mingw pseudo directories for drives,
+    # i.e. `/c/` refers to drive `C:\`, but glob `/c*/` returns no matches
+    if [[ "$INPUT" =~ ^\/[a-zA-Z]\/.* && -d "${INPUT::2}" ]]
+    then
+        TILDE_EXPANSION="${TILDE_EXPANSION::2}${TILDE_EXPANSION:3}"
+    fi
+
     echo "$TILDE_EXPANSION"
 }
 
