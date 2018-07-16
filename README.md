@@ -33,7 +33,7 @@ Windows (msys).
 Thank you for taking an interest in this project! If you wish to improve it
 please open an issue or create a pull request.
 
-You help is most needed in the following areas:
+Your help is most needed in the following areas:
 
 - Documenting the project
 - Finding (and fixing) existing bugs
