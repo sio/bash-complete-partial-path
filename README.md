@@ -1,6 +1,6 @@
 # Enhanced file path completion in bash
 
-This projects adds incomplete file path expansion to bash (the feature that was
+This project adds incomplete file path expansion to bash (the feature that was
 originally unique to zsh).
 
 When the Tab key is pressed bash expands only the last piece of the path by
