@@ -5,6 +5,8 @@
 #
 # Example: `/u/s/a<Tab>` will be expanded into `/usr/share/applications`
 #
+# https://github.com/sio/bash-complete-partial-path
+#
 
 
 # Copyright 2018 Vitaly Potyarkin
