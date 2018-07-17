@@ -27,6 +27,30 @@ To enable the described behavior source [**this file**][main] from your
 Completion functions have been tested and reported to work on Debian 9 and
 Windows (msys).
 
+# Installation
+
+To install simply copy and paste this into your terminal. This will checkout the repo to your `~/.config` path. (Assuming you have Git installed)
+
+```shell
+mkdir -p "$HOME/.config"; cd "$HOME/.config"; git clone git@github.com:sio/bash-complete-partial-path.git
+```
+
+Copy and pase the following lines into your `~/.bashrc` (or your OS equivalent).
+
+```shell
+# Enhanced file path completion in bash - https://github.com/sio/bash-complete-partial-path
+[ -s "$HOME/.config/bash-complete-partial-path/bash_completion" ] && source "$HOME/.config/bash-complete-partial-path/bash_completion"]
+```
+
+Make sure you source this project *after* the main bash-completion which may be inclded in your  `~/.bashrc` file.
+
+# Updating
+
+Copy and paste this into your terminal to use Git to pull in the latest changes.
+
+```shell
+"$HOME/.config/bash-complete-partial-path; git pull && . "$HOME/.config/bash-complete-partial-path/bash_completion"
+```
 
 # Contributing
 
