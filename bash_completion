@@ -142,7 +142,8 @@ complete -o bashdefault -o default -o nospace -F _complete_partial_dir cd
 _filedir_original_code=$(declare -f _filedir|tail -n+2)
 if [[ ! -z "$_filedir_original_code" ]]
 then
-    eval "_filedir_original() $_filedir_original_code"
+    type _filedir_original &>/dev/null || \
+        eval "_filedir_original() $_filedir_original_code"
     _filedir() {
         _filedir_original "$@"
         _complete_partial "$@"
@@ -151,7 +152,8 @@ fi
 _filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
 if [[ ! -z "$_filedir_xspec_original_code" ]]
 then
-    eval "_filedir_xspec_original() $_filedir_xspec_original_code"
+    type _filedir_xspec_original &>/dev/null || \
+        eval "_filedir_xspec_original() $_filedir_xspec_original_code"
     _filedir_xspec() {
         _filedir_xspec_original "$@"
         _complete_partial "$@"
