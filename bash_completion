@@ -66,7 +66,12 @@ _complete_partial() {
     then  # _filedir compatibility
         ACTION="directory"
     fi
-    INPUT="${COMP_WORDS[$COMP_CWORD]}"
+    if [[ "$COMP_CWORD" -ge 0 ]]
+    then
+        INPUT="${COMP_WORDS[$COMP_CWORD]}"
+    else
+        INPUT=""
+    fi
 
     # Detect and strip opened quotes
     if [[ "${INPUT:0:1}" == "'" || "${INPUT:0:1}" == '"' ]]
