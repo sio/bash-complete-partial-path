@@ -29,17 +29,30 @@
 # e.g. /u/s/app/ -> /u*/s*/app*
 #
 _put_wildcards_into_path() {
-    local PROCESSED TILDE_EXPANSION INPUT
+    local PROCESSED TILDE_EXPANSION INPUT SED_BIN OSX_SED_BIN
+
+    SED_BIN="sed"
+    # on OSX Attempt to use Brew's gnu-sed
+    if [[ $OSTYPE == darwin* ]]
+    then
+      OSX_SED_BIN="gsed"
+      hash "$OSX_SED_BIN" &> /dev/null
+      if [[ $? != 1 ]]
+      then
+        SED_BIN="$OSX_SED_BIN"
+      fi
+    fi
+
     INPUT="$@"
     PROCESSED=$( \
         echo "$INPUT" | \
-        sed \
+        "$SED_BIN" \
             -e 's:\([^\*\~]\)/:\1*/:g' \
             -e 's:\([^\/\*]\)$:\1*:g' \
             -e 's:^\(\~[^\/]*\)\*\/:\1/:' \
             -Ee 's:(\.+)\*/:\1/:g' \
     )
-    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|sed -e 's:^\\\~:~:g')"
+    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|"$SED_BIN" -e 's:^\\\~:~:g')"
 
     # Workaround for Mingw pseudo directories for drives,
     # i.e. `/c/` refers to drive `C:\`, but glob `/c*/` returns no matches
