@@ -158,11 +158,14 @@ then
     }
 fi
 
+# Make completion case insensitive
+shopt -s nocaseglob
+bind 'set completion-ignore-case on'
+
 # Readline configuration for better user experience
 bind 'TAB:menu-complete'
 bind 'set colored-completion-prefix on'
 bind 'set colored-stats on'
-bind 'set completion-ignore-case on'
 bind 'set menu-complete-display-prefix on'
 bind 'set show-all-if-ambiguous on'
 bind 'set show-all-if-unmodified on'
