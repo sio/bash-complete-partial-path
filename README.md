@@ -27,7 +27,8 @@ To enable the described behavior source [**this file**][main] from your
 Completion functions have been tested and reported to work on Debian 9 and
 Windows (msys).
 
-# Installation and updating
+
+## Installation and updating
 
 First you need to copy [bash_completion][main] file to your machine.  Copy and
 paste the following commands into your terminal to fetch the latest version of
@@ -53,7 +54,8 @@ To enable the new completion behavior put the following lines into your
 Make sure you source this project *after* the main bash-completion which may be
 included in your  `~/.bashrc` file.
 
-# Contributing
+
+## Contributing
 
 Thank you for taking an interest in this project! If you wish to improve it
 please open an issue or create a pull request.
@@ -76,7 +78,7 @@ you want to be treated.
 Thank you again!
 
 
-# License and copyright
+## License and copyright
 
 Copyright © 2018 Vitaly Potyarkin
 
