@@ -31,7 +31,34 @@ Completion functions have been tested and reported to work on Debian 9 and
 Windows (msys).
 
 
-# Contributing
+## Installation and updating
+
+First you need to copy [bash_completion][main] file to your machine.  Copy and
+paste the following commands into your terminal to fetch the latest version of
+the script to the default location (requires `curl` to be installed).
+
+```shell
+# Install or update bash-complete-partial-path
+mkdir -p "$HOME/.config/bash-complete-partial-path/" && \
+curl \
+ -o "$HOME/.config/bash-complete-partial-path/bash_completion" \
+ "https://raw.githubusercontent.com/sio/bash-complete-partial-path/master/bash_completion"
+```
+
+To enable the new completion behavior put the following lines into your
+`~/.bashrc` (or your OS equivalent).
+
+```shell
+# Enhanced file path completion in bash - https://github.com/sio/bash-complete-partial-path
+[ -s "$HOME/.config/bash-complete-partial-path/bash_completion" ] && \
+    source "$HOME/.config/bash-complete-partial-path/bash_completion"
+```
+
+Make sure you source this project *after* the main bash-completion which may be
+included in your  `~/.bashrc` file.
+
+
+## Contributing
 
 Thank you for taking an interest in this project! If you wish to improve it
 please open an issue or create a pull request.
@@ -54,7 +81,7 @@ you want to be treated.
 Thank you again!
 
 
-# License and copyright
+## License and copyright
 
 Copyright © 2018 Vitaly Potyarkin
 
