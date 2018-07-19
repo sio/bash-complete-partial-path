@@ -24,8 +24,11 @@ To enable the described behavior source [**this file**][main] from your
   its `_filedir` function. No extra configuration is required, just make sure
   you source this project *after* the main bash-completion.
 
-Completion functions have been tested and reported to work on Debian 9 and
-Windows (msys).
+Completion functions have been tested and reported to work on:
+
+- Linux (Debian 9)
+- macOS (requires gnu-sed from brew)
+- Windows (MSYS)
 
 
 # Contributing
@@ -37,6 +40,8 @@ Your help is most needed in the following areas:
 
 - Documenting the project
 - Finding (and fixing) existing bugs
+- Testing the script on other operating systems and reporting the results (both
+  positive and negative)
 - Expanding OS support (if it's lacking)
 - Adding better demo asciicasts and screenshots
 
