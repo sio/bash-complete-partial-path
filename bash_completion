@@ -28,7 +28,7 @@
 _sed_binary() {
     local SED GNU_SED
     SED="sed"
-    GNU_SED="gsed" # OSX ships BSD sed by default, gnu-sed has to be installed with brew
+    GNU_SED="gsed" # macOS ships BSD sed by default, gnu-sed has to be installed with brew
     if [[ $OSTYPE == darwin* ]]
     then
         if type "$GNU_SED" &> /dev/null
