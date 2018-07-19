@@ -24,6 +24,25 @@
 # limitations under the License.
 
 
+#
+# Detect sed binary once at load time
+#
+_sed_binary() {
+    local SED GNU_SED
+    SED="sed"
+    GNU_SED="gsed" # macOS ships BSD sed by default, gnu-sed has to be installed with brew
+    if [[ $OSTYPE == darwin* ]]
+    then
+        if type "$GNU_SED" &> /dev/null
+        then
+            SED="$GNU_SED"
+        else
+            echo "Completion script requires GNU sed, please install it with brew" >&2
+        fi
+    fi
+    echo "$SED"
+}
+_SED=$(_sed_binary)
 
 
 #
@@ -32,16 +51,17 @@
 #
 _put_wildcards_into_path() {
     local PROCESSED TILDE_EXPANSION INPUT
+
     INPUT="$@"
     PROCESSED=$( \
         echo "$INPUT" | \
-        sed \
+        $_SED \
             -e 's:\([^\*\~]\)/:\1*/:g' \
             -e 's:\([^\/\*]\)$:\1*:g' \
             -e 's:^\(\~[^\/]*\)\*\/:\1/:' \
             -Ee 's:(\.+)\*/:\1/:g' \
     )
-    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|sed -e 's:^\\\~:~:g')"
+    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|$_SED -e 's:^\\\~:~:g')"
 
     # Workaround for Mingw pseudo directories for drives,
     # i.e. `/c/` refers to drive `C:\`, but glob `/c*/` returns no matches
