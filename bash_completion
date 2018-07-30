@@ -27,7 +27,7 @@
 #
 # Detect sed binary once at load time
 #
-_sed_binary() {
+_bcpp_sed_detect() {
     local SED GNU_SED
     SED="sed"
     GNU_SED="gsed" # macOS ships BSD sed by default, gnu-sed has to be installed with brew
@@ -42,26 +42,26 @@ _sed_binary() {
     fi
     echo "$SED"
 }
-_SED=$(_sed_binary)
+_BCPP_SED=$(_bcpp_sed_detect)
 
 
 #
 # Take a single incomplete path and fill it with wildcards
 # e.g. /u/s/app/ -> /u*/s*/app*
 #
-_put_wildcards_into_path() {
+_bcpp_put_wildcards() {
     local PROCESSED TILDE_EXPANSION INPUT
 
     INPUT="$@"
     PROCESSED=$( \
         echo "$INPUT" | \
-        $_SED \
+        $_BCPP_SED \
             -e 's:\([^\*\~]\)/:\1*/:g' \
             -e 's:\([^\/\*]\)$:\1*:g' \
             -e 's:^\(\~[^\/]*\)\*\/:\1/:' \
             -Ee 's:(\.+)\*/:\1/:g' \
     )
-    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|$_SED -e 's:^\\\~:~:g')"
+    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|$_BCPP_SED -e 's:^\\\~:~:g')"
 
     # Workaround for Mingw pseudo directories for drives,
     # i.e. `/c/` refers to drive `C:\`, but glob `/c*/` returns no matches
@@ -80,7 +80,7 @@ _put_wildcards_into_path() {
 # This is a generic worker. It accepts 'file' or 'directory' as the first
 # argument to specify desired completion behavior
 #
-_complete_partial() {
+_bcpp_complete() {
     local WILDCARDS ACTION LINE OPTION INPUT UNQUOTED_INPUT QUOTE
 
     ACTION="$1"
@@ -124,7 +124,7 @@ _complete_partial() {
     fi
 
     # Add wildcards to each path element
-    WILDCARDS=$(_put_wildcards_into_path "$INPUT")
+    WILDCARDS=$(_bcpp_put_wildcards "$INPUT")
 
     # Collect completion options
     while read -r -d $'\n' LINE
@@ -148,35 +148,35 @@ _complete_partial() {
 
 
 # Wrappers
-_complete_partial_dir() { _complete_partial directory; }
-_complete_partial_file() { _complete_partial file; }
+_bcpp_complete_dir() { _bcpp_complete directory; }
+_bcpp_complete_file() { _bcpp_complete file; }
 
 # Enable enhanced completion
-complete -o bashdefault -o default -o nospace -D -F _complete_partial_file
+complete -o bashdefault -o default -o nospace -D -F _bcpp_complete_file
 
 # Optional. Make sure `cd` is autocompleted only with directories
-complete -o bashdefault -o default -o nospace -F _complete_partial_dir cd
+complete -o bashdefault -o default -o nospace -F _bcpp_complete_dir cd
 
 # Override bash-completion's _filedir (if it's in use)
 # https://salsa.debian.org/debian/bash-completion
-_filedir_original_code=$(declare -f _filedir|tail -n+2)
-if [[ ! -z "$_filedir_original_code" ]]
+_bcpp_filedir_original_code=$(declare -f _filedir|tail -n+2)
+if [[ ! -z "$_bcpp_filedir_original_code" ]]
 then
-    type _filedir_original &>/dev/null || \
-        eval "_filedir_original() $_filedir_original_code"
+    type _bcpp_filedir_original &>/dev/null || \
+        eval "_bcpp_filedir_original() $_bcpp_filedir_original_code"
     _filedir() {
-        _filedir_original "$@"
-        _complete_partial "$@"
+        _bcpp_filedir_original "$@"
+        _bcpp_complete "$@"
     }
 fi
-_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
-if [[ ! -z "$_filedir_xspec_original_code" ]]
+_bcpp_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
+if [[ ! -z "$_bcpp_filedir_xspec_original_code" ]]
 then
-    type _filedir_xspec_original &>/dev/null || \
-        eval "_filedir_xspec_original() $_filedir_xspec_original_code"
+    type _bcpp_filedir_xspec_original &>/dev/null || \
+        eval "_bcpp_filedir_xspec_original() $_bcpp_filedir_xspec_original_code"
     _filedir_xspec() {
-        _filedir_xspec_original "$@"
-        _complete_partial "$@"
+        _bcpp_filedir_xspec_original "$@"
+        _bcpp_complete "$@"
     }
 fi
 
