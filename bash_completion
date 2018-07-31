@@ -206,9 +206,9 @@ _bcpp() {
     do
         case "$ARG" in
             --defaults)
-                set -- $DEFAULT ;;
+                set -- "$@" $DEFAULT ;;
             --all)
-                set -- $ALL ;;
+                set -- "$@" $ALL ;;
         esac
     done
 
@@ -235,6 +235,8 @@ _bcpp() {
                 KEYS="${KEYS}r" ;;
             --help|--usage|-h)
                 KEYS="${KEYS}H" ;;
+            --defaults|--all)
+                ;;
             *)
                 KEYS="${KEYS}U"
                 UNKNOWN+=("$ARG")
