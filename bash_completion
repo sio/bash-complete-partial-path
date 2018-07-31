@@ -151,46 +151,6 @@ _bcpp_complete() {
 _bcpp_complete_dir() { _bcpp_complete directory; }
 _bcpp_complete_file() { _bcpp_complete file; }
 
-# Enable enhanced completion
-complete -o bashdefault -o default -o nospace -D -F _bcpp_complete_file
-
-# Optional. Make sure `cd` is autocompleted only with directories
-complete -o bashdefault -o default -o nospace -F _bcpp_complete_dir cd
-
-# Override bash-completion's _filedir (if it's in use)
-# https://salsa.debian.org/debian/bash-completion
-_bcpp_filedir_original_code=$(declare -f _filedir|tail -n+2)
-if [[ ! -z "$_bcpp_filedir_original_code" ]]
-then
-    type _bcpp_filedir_original &>/dev/null || \
-        eval "_bcpp_filedir_original() $_bcpp_filedir_original_code"
-    _filedir() {
-        _bcpp_filedir_original "$@"
-        _bcpp_complete "$@"
-    }
-fi
-_bcpp_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
-if [[ ! -z "$_bcpp_filedir_xspec_original_code" ]]
-then
-    type _bcpp_filedir_xspec_original &>/dev/null || \
-        eval "_bcpp_filedir_xspec_original() $_bcpp_filedir_xspec_original_code"
-    _filedir_xspec() {
-        _bcpp_filedir_xspec_original "$@"
-        _bcpp_complete "$@"
-    }
-fi
-
-# Make completion case insensitive
-shopt -s nocaseglob
-bind 'set completion-ignore-case on'
-
-# Readline configuration for better user experience
-bind 'TAB:menu-complete'
-bind 'set colored-completion-prefix on'
-bind 'set colored-stats on'
-bind 'set menu-complete-display-prefix on'
-bind 'set show-all-if-ambiguous on'
-bind 'set show-all-if-unmodified on'
 
 # Manage enhanced path completion
 _bcpp() {
@@ -301,30 +261,53 @@ _bcpp() {
     # the order of command line parameters
     if [[ "$KEYS" == *f* ]]  # --files
     then
-        :
+        complete -o bashdefault -o default -o nospace -D -F _bcpp_complete_file
     fi
     if [[ "$KEYS" == *d* ]]  # --dirs
     then
-        :
+        complete -o bashdefault -o default -o nospace -F _bcpp_complete_dir cd
     fi
     if [[ "$KEYS" == *o* ]]  # --override
     then
-        :
+        _bcpp_filedir_original_code=$(declare -f _filedir|tail -n+2)
+        if [[ ! -z "$_bcpp_filedir_original_code" ]]
+        then
+            type _bcpp_filedir_original &>/dev/null || \
+                eval "_bcpp_filedir_original() $_bcpp_filedir_original_code"
+            _filedir() {
+                _bcpp_filedir_original "$@"
+                _bcpp_complete "$@"
+            }
+        fi
+        _bcpp_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
+        if [[ ! -z "$_bcpp_filedir_xspec_original_code" ]]
+        then
+            type _bcpp_filedir_xspec_original &>/dev/null || \
+                eval "_bcpp_filedir_xspec_original() $_bcpp_filedir_xspec_original_code"
+            _filedir_xspec() {
+                _bcpp_filedir_xspec_original "$@"
+                _bcpp_complete "$@"
+            }
+        fi
     fi
     if [[ "$KEYS" == *c* ]]  # --nocase
     then
-        :
+        shopt -s nocaseglob
+        bind 'set completion-ignore-case on'
     fi
     if [[ "$KEYS" == *m* ]]  # --readline-menu
     then
-        :
+        bind 'TAB:menu-complete'
+        bind 'set menu-complete-display-prefix on'
     fi
     if [[ "$KEYS" == *l* ]]  # --readline-color
     then
-        :
+        bind 'set colored-completion-prefix on'
+        bind 'set colored-stats on'
     fi
     if [[ "$KEYS" == *r* ]]  # --readline-misc
     then
-        :
+        bind 'set show-all-if-ambiguous on'
+        bind 'set show-all-if-unmodified on'
     fi
 }
