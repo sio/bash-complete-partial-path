@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
 # Zsh-like expansion of incomplete file paths for Bash.
-# Source this file from your ~/.bashrc to enable the described behavior.
+# Source this file from your ~/.bashrc and use `_bcpp --defaults`
+# to enable the described behavior.
 #
 # Example: `/u/s/a<Tab>` will be expanded into `/usr/share/applications`
 #
