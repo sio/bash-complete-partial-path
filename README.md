@@ -16,7 +16,7 @@ Watch a demo screencast to see this feature in action:
 [![asciicast](https://asciinema.org/a/0zhzOYbkF22pWLmbx1RHCYyqQ.png)](https://asciinema.org/a/0zhzOYbkF22pWLmbx1RHCYyqQ)
 
 To enable the described behavior source [**this file**][main] from your
-~/.bashrc. Supported features are:
+~/.bashrc and run `_bcpp --defaults`. Supported features are:
 
 - Special characters in completed path are automatically escaped if present
 - Tilde expressions are properly expanded (as per [bash documentation])
