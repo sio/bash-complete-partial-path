@@ -16,7 +16,7 @@ Watch a demo screencast to see this feature in action:
 [![asciicast](https://asciinema.org/a/0zhzOYbkF22pWLmbx1RHCYyqQ.png)](https://asciinema.org/a/0zhzOYbkF22pWLmbx1RHCYyqQ)
 
 To enable the described behavior source [**this file**][main] from your
-~/.bashrc. Supported features are:
+~/.bashrc and run `_bcpp --defaults`. Supported features are:
 
 - Special characters in completed path are automatically escaped if present
 - Tilde expressions are properly expanded (as per [bash documentation])
@@ -53,12 +53,57 @@ To enable the new completion behavior put the following lines into your
 
 ```shell
 # Enhanced file path completion in bash - https://github.com/sio/bash-complete-partial-path
-[ -s "$HOME/.config/bash-complete-partial-path/bash_completion" ] && \
+if [ -s "$HOME/.config/bash-complete-partial-path/bash_completion" ]
+then
     source "$HOME/.config/bash-complete-partial-path/bash_completion"
+    _bcpp --defaults
+fi
 ```
 
 Make sure you source this project *after* the main bash-completion which may be
 included in your  `~/.bashrc` file.
+
+## Custom feature selection
+
+If you like the project idea overall but do not agree with default behavior,
+you can select which features to enable with `_bcpp` manager function. Sourcing
+the file without calling this function has no side effects.
+
+```
+Usage: _bcpp OPTIONS
+    Manage enhanced path completion in bash
+
+Options:
+    --defaults
+        Enable the subset of features recommended by maintainer.
+        Currently equals to:
+        "--files --dirs --override --nocase --readline"
+    --all
+        Enable all optional features. Equals to:
+        "--files --dirs --override --nocase --readline"
+    --help
+        Show this help message
+
+Individual feature flags:
+    --files
+        Enable enhanced completion for file paths
+    --dirs
+        Complete `cd` with paths to directories only
+    --override
+        Override bash-completion if it's in use
+    --nocase
+        Make path completion case insensitive
+    --readline
+        Configure readline for better user experience. Equals to:
+        "--readline-menu --readline-color --readline-misc"
+    --readline-color
+        Enable colors in completion
+    --readline-menu
+        Use `menu-complete` when TAB key is pressed instead of default
+        `complete`
+    --readline-misc
+        Other useful readline tweaks
+```
 
 
 ## Contributing

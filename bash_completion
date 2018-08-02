@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
 # Zsh-like expansion of incomplete file paths for Bash.
-# Source this file from your ~/.bashrc to enable the described behavior.
+# Source this file from your ~/.bashrc and use `_bcpp --defaults`
+# to enable the described behavior.
 #
 # Example: `/u/s/a<Tab>` will be expanded into `/usr/share/applications`
 #
@@ -27,7 +28,7 @@
 #
 # Detect sed binary once at load time
 #
-_sed_binary() {
+_bcpp_sed_detect() {
     local SED GNU_SED
     SED="sed"
     GNU_SED="gsed" # macOS ships BSD sed by default, gnu-sed has to be installed with brew
@@ -42,26 +43,26 @@ _sed_binary() {
     fi
     echo "$SED"
 }
-_SED=$(_sed_binary)
+_BCPP_SED=$(_bcpp_sed_detect)
 
 
 #
 # Take a single incomplete path and fill it with wildcards
 # e.g. /u/s/app/ -> /u*/s*/app*
 #
-_put_wildcards_into_path() {
+_bcpp_put_wildcards() {
     local PROCESSED TILDE_EXPANSION INPUT
 
     INPUT="$@"
     PROCESSED=$( \
         echo "$INPUT" | \
-        $_SED \
+        $_BCPP_SED \
             -e 's:\([^\*\~]\)/:\1*/:g' \
             -e 's:\([^\/\*]\)$:\1*:g' \
             -e 's:^\(\~[^\/]*\)\*\/:\1/:' \
             -Ee 's:(\.+)\*/:\1/:g' \
     )
-    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|$_SED -e 's:^\\\~:~:g')"
+    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|$_BCPP_SED -e 's:^\\\~:~:g')"
 
     # Workaround for Mingw pseudo directories for drives,
     # i.e. `/c/` refers to drive `C:\`, but glob `/c*/` returns no matches
@@ -80,7 +81,7 @@ _put_wildcards_into_path() {
 # This is a generic worker. It accepts 'file' or 'directory' as the first
 # argument to specify desired completion behavior
 #
-_complete_partial() {
+_bcpp_complete() {
     local WILDCARDS ACTION LINE OPTION INPUT UNQUOTED_INPUT QUOTE
 
     ACTION="$1"
@@ -124,7 +125,7 @@ _complete_partial() {
     fi
 
     # Add wildcards to each path element
-    WILDCARDS=$(_put_wildcards_into_path "$INPUT")
+    WILDCARDS=$(_bcpp_put_wildcards "$INPUT")
 
     # Collect completion options
     while read -r -d $'\n' LINE
@@ -148,46 +149,168 @@ _complete_partial() {
 
 
 # Wrappers
-_complete_partial_dir() { _complete_partial directory; }
-_complete_partial_file() { _complete_partial file; }
+_bcpp_complete_dir() { _bcpp_complete directory; }
+_bcpp_complete_file() { _bcpp_complete file; }
 
-# Enable enhanced completion
-complete -o bashdefault -o default -o nospace -D -F _complete_partial_file
 
-# Optional. Make sure `cd` is autocompleted only with directories
-complete -o bashdefault -o default -o nospace -F _complete_partial_dir cd
+# Manage enhanced path completion
+_bcpp() {
+    local DEFAULT ALL KEYS ARG USAGE UNKNOWN
 
-# Override bash-completion's _filedir (if it's in use)
-# https://salsa.debian.org/debian/bash-completion
-_filedir_original_code=$(declare -f _filedir|tail -n+2)
-if [[ ! -z "$_filedir_original_code" ]]
-then
-    type _filedir_original &>/dev/null || \
-        eval "_filedir_original() $_filedir_original_code"
-    _filedir() {
-        _filedir_original "$@"
-        _complete_partial "$@"
-    }
-fi
-_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
-if [[ ! -z "$_filedir_xspec_original_code" ]]
-then
-    type _filedir_xspec_original &>/dev/null || \
-        eval "_filedir_xspec_original() $_filedir_xspec_original_code"
-    _filedir_xspec() {
-        _filedir_xspec_original "$@"
-        _complete_partial "$@"
-    }
-fi
+    DEFAULT="--files --dirs --override --nocase --readline"
+    ALL="--files --dirs --override --nocase --readline"
+    USAGE=(
+        "Usage: $FUNCNAME OPTIONS"
+        "    Manage enhanced path completion in bash"
+        ""
+        "Options:"
+        "    --defaults"
+        "        Enable the subset of features recommended by maintainer."
+        "        Currently equals to:"
+        "        \"$DEFAULT\""
+        "    --all"
+        "        Enable all optional features. Equals to:"
+        "        \"$ALL\""
+        "    --help"
+        "        Show this help message"
+        ""
+        "Individual feature flags:"
+        "    --files"
+        "        Enable enhanced completion for file paths"
+        "    --dirs"
+        "        Complete \`cd\` with paths to directories only"
+        "    --override"
+        "        Override bash-completion if it's in use"
+        "    --nocase"
+        "        Make path completion case insensitive"
+        "    --readline"
+        "        Configure readline for better user experience. Equals to:"
+        "        \"--readline-menu --readline-color --readline-misc\""
+        "    --readline-color"
+        "        Enable colors in completion"
+        "    --readline-menu"
+        "        Use \`menu-complete\` when TAB key is pressed instead of default"
+        "        \`complete\`"
+        "    --readline-misc"
+        "        Other useful readline tweaks"
+        ""
+        "Copyright 2018 Vitaly Potyarkin"
+        "<https://github.com/sio/bash-complete-partial-path>"
+        ""
+        "This program is Free Software and comes with ABSOLUTELY NO WARRANTY,"
+        "to the extent permitted by applicable law. For more information see:"
+        "<http://www.apache.org/licenses/LICENSE-2.0>"
+    )
 
-# Make completion case insensitive
-shopt -s nocaseglob
-bind 'set completion-ignore-case on'
+    # Modify selected features list
+    for ARG in "$@"
+    do
+        case "$ARG" in
+            --defaults)
+                set -- "$@" $DEFAULT ;;
+            --all)
+                set -- "$@" $ALL ;;
+        esac
+    done
 
-# Readline configuration for better user experience
-bind 'TAB:menu-complete'
-bind 'set colored-completion-prefix on'
-bind 'set colored-stats on'
-bind 'set menu-complete-display-prefix on'
-bind 'set show-all-if-ambiguous on'
-bind 'set show-all-if-unmodified on'
+    # Detect selected features
+    KEYS=""
+    for ARG in "$@"
+    do
+        case "$ARG" in
+            --files)
+                KEYS="${KEYS}f" ;;
+            --dirs)
+                KEYS="${KEYS}d" ;;
+            --override)
+                KEYS="${KEYS}o" ;;
+            --nocase)
+                KEYS="${KEYS}c" ;;
+            --readline)
+                KEYS="${KEYS}mlr" ;;
+            --readline-menu)
+                KEYS="${KEYS}m" ;;
+            --readline-color)
+                KEYS="${KEYS}l" ;;
+            --readline-misc)
+                KEYS="${KEYS}r" ;;
+            --help|--usage|-h)
+                KEYS="${KEYS}H" ;;
+            --defaults|--all)
+                ;;
+            *)
+                KEYS="${KEYS}U"
+                UNKNOWN+=("$ARG")
+                ;;
+        esac
+    done
+
+    # Special cases that terminate function
+    if [[ "$KEYS" == *H* || -z "$@" ]]  # --help|--usage|-h
+    then
+        printf "%s\n" "${USAGE[@]}"
+        return 0
+    fi
+    if [[ "$KEYS" == *U* ]]  # unknown arguments
+    then
+        echo -e \
+            "Unknown arguments: ${UNKNOWN[@]}" \
+            "\nRefer to \`$FUNCNAME --help\` for more information" \
+            >&2
+        return 1
+    fi
+
+    # Enable selected functionality. The order of execution does not depend on
+    # the order of command line parameters
+    if [[ "$KEYS" == *f* ]]  # --files
+    then
+        complete -o bashdefault -o default -o nospace -D -F _bcpp_complete_file
+    fi
+    if [[ "$KEYS" == *d* ]]  # --dirs
+    then
+        complete -o bashdefault -o default -o nospace -F _bcpp_complete_dir cd
+    fi
+    if [[ "$KEYS" == *o* ]]  # --override
+    then
+        _bcpp_filedir_original_code=$(declare -f _filedir|tail -n+2)
+        if [[ ! -z "$_bcpp_filedir_original_code" ]]
+        then
+            type _bcpp_filedir_original &>/dev/null || \
+                eval "_bcpp_filedir_original() $_bcpp_filedir_original_code"
+            _filedir() {
+                _bcpp_filedir_original "$@"
+                _bcpp_complete "$@"
+            }
+        fi
+        _bcpp_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
+        if [[ ! -z "$_bcpp_filedir_xspec_original_code" ]]
+        then
+            type _bcpp_filedir_xspec_original &>/dev/null || \
+                eval "_bcpp_filedir_xspec_original() $_bcpp_filedir_xspec_original_code"
+            _filedir_xspec() {
+                _bcpp_filedir_xspec_original "$@"
+                _bcpp_complete "$@"
+            }
+        fi
+    fi
+    if [[ "$KEYS" == *c* ]]  # --nocase
+    then
+        shopt -s nocaseglob
+        bind 'set completion-ignore-case on'
+    fi
+    if [[ "$KEYS" == *m* ]]  # --readline-menu
+    then
+        bind 'TAB:menu-complete'
+        bind 'set menu-complete-display-prefix on'
+    fi
+    if [[ "$KEYS" == *l* ]]  # --readline-color
+    then
+        bind 'set colored-completion-prefix on'
+        bind 'set colored-stats on'
+    fi
+    if [[ "$KEYS" == *r* ]]  # --readline-misc
+    then
+        bind 'set show-all-if-ambiguous on'
+        bind 'set show-all-if-unmodified on'
+    fi
+}
