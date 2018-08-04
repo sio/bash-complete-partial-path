@@ -279,7 +279,7 @@ _bcpp() {
                 eval "_bcpp_filedir_original() $_bcpp_filedir_original_code"
             _filedir() {
                 _bcpp_filedir_original "$@"
-                _bcpp_complete "$@"
+                [ "${#COMPREPLY[@]}" -eq 0 ] && _bcpp_complete "$@"
             }
         fi
         _bcpp_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
@@ -289,7 +289,7 @@ _bcpp() {
                 eval "_bcpp_filedir_xspec_original() $_bcpp_filedir_xspec_original_code"
             _filedir_xspec() {
                 _bcpp_filedir_xspec_original "$@"
-                _bcpp_complete "$@"
+                [ "${#COMPREPLY[@]}" -eq 0 ] && _bcpp_complete "$@"
             }
         fi
     fi
