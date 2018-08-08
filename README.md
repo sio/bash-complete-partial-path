@@ -110,6 +110,8 @@ Individual feature flags:
 
 Thank you for taking an interest in this project! If you wish to improve it
 please open an issue or create a pull request.
+If you just want to share your emotions, we encourage you to do so
+[here](https://github.com/sio/bash-complete-partial-path/issues/6)!
 
 Your help is most needed in the following areas:
 
