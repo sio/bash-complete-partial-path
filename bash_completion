@@ -303,7 +303,6 @@ _bcpp() {
         bind 'TAB:menu-complete'
         bind '"\e[Z": menu-complete-backward'  # Shift+Tab
         bind 'set menu-complete-display-prefix on'
-        bind 'set skip-completed-text on'
     fi
     if [[ "$KEYS" == *l* ]]  # --readline-color
     then
