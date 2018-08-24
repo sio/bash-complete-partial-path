@@ -269,6 +269,7 @@ _bcpp() {
     if [[ "$KEYS" == *d* ]]  # --dirs
     then
         complete -F _bcpp_complete_dir cd
+        complete -F _bcpp_complete_dir pushd
     fi
     if [[ "$KEYS" == *o* ]]  # --override
     then
