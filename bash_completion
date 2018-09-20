@@ -63,7 +63,11 @@ _bcpp_put_wildcards() {
             -Ee 's:(\.+)\*/:\1/:g' \
             -Ee 's:(^|/)(\$[^/]+)\*(/|$):\2\3:g'
     )
-    eval "TILDE_EXPANSION=$(printf '%q' "$PROCESSED"|$_BCPP_SED -e 's:^\\\~:~:g')"
+    eval "TILDE_EXPANSION=$(\
+        printf \
+            '%q' \
+            "$PROCESSED"|$_BCPP_SED -e 's:^\\\~:~:g' -Ee 's:(^|/)\\(\$):\1\2:g' \
+    )"
 
     # Workaround for Mingw pseudo directories for drives,
     # i.e. `/c/` refers to drive `C:\`, but glob `/c*/` returns no matches
