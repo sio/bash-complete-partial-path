@@ -106,6 +106,37 @@ Individual feature flags:
 ```
 
 
+## Support
+
+#### Issue tracker
+
+GitHub's [issue tracker] is the primary venue for asking and answering support
+questions. Please don't forget to search closed issues for the topic you're
+interested in!
+
+If you know an answer to the question asked by someone else, please do not
+hesitate to post it! That would be a great help to the project!
+
+#### Email
+
+If for some reason you'd rather not use the [issue tracker], contacting me via
+email is OK too. Please use a descriptive subject line to enhance visibility
+of your message. Also please keep in mind that support through the channels
+accessible to the public is preferable because one answer can help many people
+who might read it later.
+
+My email is visible under the GitHub profile and in the commit log.
+
+#### Community support
+
+You might get faster and more interactive support from other users.
+
+This project does not (yet) have a dedicated community venue, but experienced
+Linux users will most likely be able to figure out most common questions. You
+can try asking at the local Linux-related forums, IRC/Discord/Telegram chats
+or on Reddit/StackOverflow.
+
+
 ## Contributing
 
 Thank you for taking an interest in this project! If you wish to improve it
@@ -154,3 +185,4 @@ Copyright © 2018 Vitaly Potyarkin
 [bash-completion]: https://salsa.debian.org/debian/bash-completion
 [bash documentation]: https://www.gnu.org/software/bash/manual/html_node/Tilde-Expansion.html
 [main]: bash_completion
+[issue tracker]: https://github.com/sio/bash-complete-partial-path/issues
