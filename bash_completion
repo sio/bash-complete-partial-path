@@ -267,17 +267,11 @@ _bcpp() {
 
     # Enable selected functionality. The order of execution does not depend on
     # the order of command line parameters
-    if [[ "$KEYS" == *f* ]]  # --files
-    then
-        complete -D -F _bcpp_complete_file
-    fi
-    if [[ "$KEYS" == *d* ]]  # --dirs
-    then
-        complete -F _bcpp_complete_dir cd
-        complete -F _bcpp_complete_dir pushd
-    fi
     if [[ "$KEYS" == *o* ]]  # --override
     then
+        local DYNAMIC
+        DYNAMIC=$(complete -p|grep -E -- '-D.*_completion_loader|_completion_loader.*-D')
+
         local _bcpp_filedir_original_code
         _bcpp_filedir_original_code=$(declare -f _filedir|tail -n+2)
         if [[ ! -z "$_bcpp_filedir_original_code" ]]
@@ -289,6 +283,7 @@ _bcpp() {
                 [ "${#COMPREPLY[@]}" -eq 0 ] && _bcpp_complete "$@"
             }
         fi
+
         local _bcpp_filedir_xspec_original_code
         _bcpp_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
         if [[ ! -z "$_bcpp_filedir_xspec_original_code" ]]
@@ -300,6 +295,17 @@ _bcpp() {
                 [ "${#COMPREPLY[@]}" -eq 0 ] && _bcpp_complete "$@"
             }
         fi
+    fi
+    if [[ "$KEYS" == *f* ]]  # --files
+    then
+        # Do not overwrite default completion function if dynamic completion
+        # loader is enabled
+        [[ -z "$DYNAMIC" ]] && complete -D -F _bcpp_complete_file
+    fi
+    if [[ "$KEYS" == *d* ]]  # --dirs
+    then
+        complete -F _bcpp_complete_dir cd
+        complete -F _bcpp_complete_dir pushd
     fi
     if [[ "$KEYS" == *c* ]]  # --nocase
     then
