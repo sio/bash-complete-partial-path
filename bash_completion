@@ -278,6 +278,7 @@ _bcpp() {
     fi
     if [[ "$KEYS" == *o* ]]  # --override
     then
+        local _bcpp_filedir_original_code
         _bcpp_filedir_original_code=$(declare -f _filedir|tail -n+2)
         if [[ ! -z "$_bcpp_filedir_original_code" ]]
         then
@@ -288,6 +289,7 @@ _bcpp() {
                 [ "${#COMPREPLY[@]}" -eq 0 ] && _bcpp_complete "$@"
             }
         fi
+        local _bcpp_filedir_xspec_original_code
         _bcpp_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
         if [[ ! -z "$_bcpp_filedir_xspec_original_code" ]]
         then
