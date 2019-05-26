@@ -162,8 +162,8 @@ _bcpp_complete_file() { _bcpp_complete file; }
 _bcpp() {
     local DEFAULT ALL KEYS ARG USAGE UNKNOWN
 
-    DEFAULT="--files --dirs --override --nocase --readline"
-    ALL="--files --dirs --override --nocase --readline"
+    DEFAULT="--files --dirs --cooperate --nocase --readline"
+    ALL="--files --dirs --cooperate --nocase --readline"
     USAGE=(
         "Usage: $FUNCNAME OPTIONS"
         "    Manage enhanced path completion in bash"
@@ -184,8 +184,11 @@ _bcpp() {
         "        Enable enhanced completion for file paths"
         "    --dirs"
         "        Complete \`cd\` with paths to directories only"
-        "    --override"
-        "        Override bash-completion if it's in use"
+        "    --cooperate"
+        "        Cooperate with system-wide bash-completion if it's in use."
+        "        This function must be invoked AFTER the main bash-completion"
+        "        is loaded."
+        "        Deprecated alias: --override"
         "    --nocase"
         "        Make path completion case insensitive"
         "    --readline"
@@ -227,7 +230,7 @@ _bcpp() {
                 KEYS="${KEYS}f" ;;
             --dirs)
                 KEYS="${KEYS}d" ;;
-            --override)
+            --cooperate|--override)
                 KEYS="${KEYS}o" ;;
             --nocase)
                 KEYS="${KEYS}c" ;;
@@ -267,7 +270,7 @@ _bcpp() {
 
     # Enable selected functionality. The order of execution does not depend on
     # the order of command line parameters
-    if [[ "$KEYS" == *o* ]]  # --override
+    if [[ "$KEYS" == *o* ]]  # --cooperate|--override
     then
         local DYNAMIC
         DYNAMIC=$(complete -p|grep -E -- '-D.*_completion_loader|_completion_loader.*-D')

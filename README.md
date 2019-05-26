@@ -77,10 +77,10 @@ Options:
     --defaults
         Enable the subset of features recommended by maintainer.
         Currently equals to:
-        "--files --dirs --override --nocase --readline"
+        "--files --dirs --cooperate --nocase --readline"
     --all
         Enable all optional features. Equals to:
-        "--files --dirs --override --nocase --readline"
+        "--files --dirs --cooperate --nocase --readline"
     --help
         Show this help message
 
@@ -89,8 +89,11 @@ Individual feature flags:
         Enable enhanced completion for file paths
     --dirs
         Complete `cd` with paths to directories only
-    --override
-        Override bash-completion if it's in use
+    --cooperate
+        Cooperate with system-wide bash-completion if it's in use.
+        This function must be invoked AFTER the main bash-completion
+        is loaded.
+        Deprecated alias: --override
     --nocase
         Make path completion case insensitive
     --readline
