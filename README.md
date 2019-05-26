@@ -109,6 +109,23 @@ Individual feature flags:
 ```
 
 
+## Working together with other completion scripts
+
+Partial path completion provided by this project is designed to work correctly
+when [bash-completion] is in use (see `--cooperate` flag). Make sure you
+invoke `_bcpp` after the main completion script has been sourced.
+
+Enhanced completion will work for most, but not all commands unfortunately.
+Some completion scripts within [bash-completion] project do not rely on global
+`_filedir*` functions but instead implement their own logic for path
+completion. For such scripts there is no simple way to inject modified
+completion algorithm without disabling the rest of their functionality.
+
+If for any particular command you'll prefer partial path completion over its
+provided completion script, you can run `complete -F _bcpp_complete_file
+COMMANDNAME` (and/or add that to ~/.bashrc)
+
+
 ## Support
 
 #### Issue tracker
