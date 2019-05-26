@@ -182,7 +182,7 @@ Copyright © 2018 Vitaly Potyarkin
    limitations under the License.
 ```
 
-[bash-completion]: https://salsa.debian.org/debian/bash-completion
+[bash-completion]: https://github.com/scop/bash-completion
 [bash documentation]: https://www.gnu.org/software/bash/manual/html_node/Tilde-Expansion.html
 [main]: bash_completion
 [issue tracker]: https://github.com/sio/bash-complete-partial-path/issues
