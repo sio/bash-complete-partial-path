@@ -10,7 +10,7 @@
 #
 
 
-# Copyright 2018 Vitaly Potyarkin
+# Copyright 2018-2019 Vitaly Potyarkin
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -199,7 +199,7 @@ _bcpp() {
         "    --readline-misc"
         "        Other useful readline tweaks"
         ""
-        "Copyright 2018 Vitaly Potyarkin"
+        "Copyright 2018-2019 Vitaly Potyarkin"
         "<https://github.com/sio/bash-complete-partial-path>"
         ""
         "This program is Free Software and comes with ABSOLUTELY NO WARRANTY,"
