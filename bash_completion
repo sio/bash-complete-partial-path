@@ -87,7 +87,7 @@ _bcpp_put_wildcards() {
 # argument to specify desired completion behavior
 #
 _bcpp_complete() {
-    local WILDCARDS ACTION LINE OPTION INPUT UNQUOTED_INPUT QUOTE
+    local WILDCARDS ACTION LINE OPTION INPUT QUOTE
 
     ACTION="$1"
     if [[ "_$1" == "_-d" ]]
