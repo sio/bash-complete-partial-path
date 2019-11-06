@@ -102,8 +102,8 @@ Individual feature flags:
     --readline-color
         Enable colors in completion
     --readline-menu
-        Use `menu-complete` when TAB key is pressed instead of default
-        `complete`
+        Use `menu-complete` when Tab key is pressed instead of default
+        `complete`. Use Shift+Tab to return to previous suggestion
     --readline-misc
         Other useful readline tweaks
 ```
