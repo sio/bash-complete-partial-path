@@ -13,7 +13,8 @@ Introductory overview is available at
 [author's blog](https://potyarkin.ml/posts/2018/enhanced-file-path-completion-in-bash-like-in-zsh/).
 
 Watch a demo screencast to see this feature in action:
-[![asciicast](https://asciinema.org/a/0zhzOYbkF22pWLmbx1RHCYyqQ.png)](https://asciinema.org/a/0zhzOYbkF22pWLmbx1RHCYyqQ)
+
+[![asciicast](https://asciinema.org/a/191776.svg)](https://asciinema.org/a/191776)
 
 To enable the described behavior source [**this file**][main] from your
 ~/.bashrc and run `_bcpp --defaults`. Supported features are:
