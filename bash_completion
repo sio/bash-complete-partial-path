@@ -125,7 +125,12 @@ _bcpp_complete() {
         else
             OPTION="filenames"
         fi
-        COMPREPLY=($(compgen -o "$OPTION" "$INPUT"))
+        if [[ -d "$INPUT" && "${INPUT: -1}" != '/' ]]
+        then
+            COMPREPLY=("$INPUT/")
+        else
+            COMPREPLY=($(compgen -o "$OPTION" "$INPUT"))
+        fi
         return
     fi
 
