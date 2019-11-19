@@ -185,6 +185,18 @@ you want to be treated.
 Thank you again!
 
 
+## Information for developers
+
+#### Debugging
+
+Executing `set -v; set -x` before attempting completion enables printing a lot
+of useful debugging information
+
+#### Automated testing
+
+Not implemented yet, but technically possible via Python + pexpect. See #11
+
+
 ## License and copyright
 
 Copyright © 2018-2019 Vitaly Potyarkin
