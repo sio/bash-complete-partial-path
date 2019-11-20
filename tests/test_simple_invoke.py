@@ -1,5 +1,8 @@
 import os
 import platform
+import re
+from itertools import chain
+from pathlib import Path
 
 import pytest
 import pexpect
@@ -17,8 +20,14 @@ class BashSessionError(Exception):
 
 
 class BashSession:
-    PS1 = '__>>>__'
+    '''Wrapper for interactive bash session'''
+
     ENCODING = 'utf-8'
+    MARKER = '>>-!-<<'
+    PS1 = '__>>>__'
+    STARTUP = [
+        "bind 'set bell-style none'",
+    ]
 
     def __init__(self, *a,
                  cmd='bash',
@@ -42,13 +51,37 @@ class BashSession:
             dimensions=(24, 160),  # https://github.com/scop/bash-completion/blob/fb46fed657d6b6575974b2fd5a9b6529ed2472b7/test/t/conftest.py#L112-L115
             **ka,
         )
-        for command in (startup or ()):
+        for command in chain(self.STARTUP, startup or ()):
             self.execute(command)
 
-    def complete(self, text):
-        pass
+    def complete(self, text, tabs=1):
+        '''
+        Trigger completion after inputting text into interactive bash session
+
+        Return completion results
+        '''
+        self._clear_current_line()
+
+        proc = self.process
+        proc.send('{}{}'.format(text, '\t' * tabs))
+        proc.expect_exact(text)
+        proc.send(self.MARKER)
+        result = proc.expect([
+            re.escape(self.MARKER),
+            self.PS1,
+        ])
+        output = proc.before.strip()
+
+        proc.sendcontrol('c')  # drop current input
+        proc.expect_exact(self.PS1)
+        return output
 
     def execute(self, command, timeout=-1, exitcode=0):
+        '''
+        Execute a single command in interactive shell. Check its return code.
+
+        Return terminal output after execution.
+        '''
         self._clear_current_line()
 
         proc = self.process
@@ -69,19 +102,26 @@ class BashSession:
         return output
 
     def _clear_current_line(self):
-        '''
-        Clear any input on the current line
-        https://askubuntu.com/a/471023
-        '''
+        '''Clear any input on the current line <https://askubuntu.com/a/471023>'''
         self.process.sendcontrol('e')
         self.process.sendcontrol('u')
 
+
+BCPP = 'bash_completion'
+
+@pytest.fixture
+def bash():
+    startup = [
+        'source {}'.format(Path(BCPP).resolve()),
+        '_bcpp --defaults',
+    ]
+    shell = BashSession(startup=startup)  # TODO: cwd?
+    return shell
 
 class TestInvocation:
 
     def test_simple(self):
         assert 1 == 1
 
-    def test_bash(self):
-        bash = BashSession()
+    def test_bash(self, bash):
         import pdb; pdb.set_trace()
