@@ -1,5 +1,5 @@
 '''
-Simple completion cases should be consistent with default behavior
+Simple completion cases for file and directory paths
 '''
 
 import pytest
