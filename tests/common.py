@@ -69,10 +69,9 @@ class BashSession:
         proc.send('{}{}'.format(text, '\t' * tabs))
         proc.expect_exact(text)
         proc.send(self.MARKER)
-        result = proc.expect([
-            re.escape(self.MARKER),
-            self.PS1,
-        ])
+        match = proc.expect([re.escape(self.MARKER), self.PS1])
+        if match == 1 and proc.before and not proc.before.strip('\r'):  # drop \r\rPS1
+            proc.expect([re.escape(self.MARKER), self.PS1])
         output = proc.before.strip()
 
         backspaces = 0
