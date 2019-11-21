@@ -80,6 +80,22 @@ _bcpp_put_wildcards() {
 }
 
 
+# Run a job in background without printing job control messages and without a
+# subshell
+# https://stackoverflow.com/a/51061046
+_bcpp_silent_bg() {
+    { 2>&3 "$@"& } 3>&2 2>/dev/null
+    disown &>/dev/null  # Prevent whine if job has already completed
+    return 0  # do not clutter $? value (last exit code)
+}
+
+# Helper function for wrapping compgen output to named pipe
+_bcpp_compgen() {
+    local wildcards="$1"
+    local pipe="$2"
+    compgen -G "$wildcards" "$wildcards" 2>/dev/null >"$pipe"
+}
+
 #
 # Bash completion function for expanding partial paths
 #
@@ -138,6 +154,10 @@ _bcpp_complete() {
     WILDCARDS=$(_bcpp_put_wildcards "$INPUT")
 
     # Collect completion options
+    local pipe
+    pipe=$(mktemp -u --tmpdir 'bcpp_pipe_XXXXXXXX')
+    mkfifo -m 600 "$pipe"
+    _bcpp_silent_bg _bcpp_compgen "$WILDCARDS" "$pipe"
     while read -r -d $'\n' LINE
     do
         if [[ "_$ACTION" == "_directory" && ! -d "$LINE" ]]
@@ -153,8 +173,8 @@ _bcpp_complete() {
             LINE=$(printf "%q" "$LINE")
         fi
         COMPREPLY+=("$LINE")
-    done <<< $(compgen -G "$WILDCARDS" "$WILDCARDS" 2>/dev/null)
-    return 0  # do not clutter $? value (last exit code)
+    done < "$pipe"
+    rm "$pipe"
 }
 
 
