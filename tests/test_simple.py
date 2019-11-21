@@ -51,7 +51,3 @@ class TestPathCompletion:
         for variant in variants:
             completed = completed.replace(variant, '')
         assert not completed.strip(), 'extra output in completion results'
-
-
-def test_debug(bash):
-    import pdb; pdb.set_trace()
