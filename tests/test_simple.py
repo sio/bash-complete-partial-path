@@ -31,6 +31,8 @@ def bash_filetree(bash, log):
 
 
 class TestSimpleCompletion:
+    '''All tests in this class will run within the same instance of bash'''
+
     @pytest.mark.parametrize(
         'command,completion',
         (
@@ -42,5 +44,42 @@ class TestSimpleCompletion:
         )
     )
     def test_simple_one_result(self, bash_filetree, command, completion):
+        '''Complete unambiguos paths - default completer'''
         bash = bash_filetree
         assert bash.complete(command) == completion
+
+
+    @pytest.mark.parametrize(
+        'command,completions',
+        (
+            ('ls usr/s', ['usr/share', 'usr/somefile']),
+            ('ls usr/', ['share/', 'somefile']),
+            ('cd usr/share/a', ['usr/share/another', 'usr/share/anything', 'usr/share/applications']),
+            ('cd usr/share/', ['usr/share/another', 'usr/share/anything', 'usr/share/applications']),
+        )
+    )
+    def test_simple_many_results(self, bash_filetree, command, completions):
+        '''Complete ambiguous paths - default completer'''
+        bash = bash_filetree
+        completed = bash.complete(command)
+        assert completed
+        for variant in completions:
+            assert variant in completed
+
+
+    @pytest.mark.parametrize(
+        'command,completion',
+        (
+            ('ls u/s/app', 'ls usr/share/applications'),
+            ('cd u/s', 'cd usr/share'),
+        )
+    )
+    def test_bcpp_one_result(self, bash_filetree, command, completion):
+        '''Complete unambiguios paths - partial completer'''
+        bash = bash_filetree
+        assert bash.complete(command) == completion
+
+
+def test_debug(bash_filetree):
+    bash = bash_filetree
+    import pdb; pdb.set_trace()
