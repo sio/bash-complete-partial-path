@@ -157,6 +157,11 @@ _bcpp_complete() {
     local pipe
     pipe=$(mktemp -u --tmpdir 'bcpp_pipe_XXXXXXXX')
     mkfifo -m 600 "$pipe"
+
+    local monitor
+    [[ "$-" == *m* ]] && monitor=yes || monitor=no
+    [[ "$monitor" == yes ]] && set +m
+
     _bcpp_silent_bg _bcpp_compgen "$WILDCARDS" "$pipe"
     while read -r -d $'\n' LINE
     do
@@ -175,6 +180,7 @@ _bcpp_complete() {
         COMPREPLY+=("$LINE")
     done < "$pipe"
     rm "$pipe"
+    [[ "$monitor" == yes ]] && set -m
 }
 
 
