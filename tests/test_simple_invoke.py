@@ -113,7 +113,7 @@ BCPP = 'bash_completion'
 @pytest.fixture
 def bash():
     startup = [
-        'source {}'.format(Path(BCPP).resolve()),
+        'source "{}"'.format(Path(BCPP).resolve()),
         '_bcpp --defaults',
     ]
     with TemporaryDirectory(prefix='bcpp_test_') as tmpdir:
