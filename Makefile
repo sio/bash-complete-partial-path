@@ -1,9 +1,17 @@
 PYTEST_ARGS?=-p no:cacheprovider
 REQUIREMENTS_TXT=tests/requirements.txt
+SED?=sed
 
 
-test: venv
+test: venv deps
 	$(VENV)/pytest $(PYTEST_ARGS)
+
+
+.PHONY: deps
+deps:
+	$(PY) --version
+	$(SED) --version
+	bash --version
 
 
 include Makefile.venv
