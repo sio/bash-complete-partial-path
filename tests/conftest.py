@@ -79,6 +79,15 @@ class BashSession:
         ])
         output = proc.before.strip()
 
+        backspaces = 0
+        for char in output:
+            if char == '\x08':
+                backspaces += 1
+            else:
+                break
+        if backspaces:  # handle BACKSPACE characters in the beginning of completion
+            output = text[:-backspaces] + output[backspaces:]
+
         proc.sendcontrol('c')  # drop current input
         proc.expect_exact(self.PS1)
         return output
