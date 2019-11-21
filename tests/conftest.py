@@ -1,3 +1,7 @@
+'''
+Shared fixtures for completion testing
+'''
+
 import os
 import platform
 import re
@@ -108,10 +112,17 @@ class BashSession:
         self.process.sendcontrol('u')
 
 
-BCPP = 'bash_completion'
+BCPP = 'bash_completion'  # relative path from repo's top level
+
 
 @pytest.fixture
-def bash():
+def bash() -> BashSession:
+    '''
+    Fixture for automated tests.
+
+    Provides BashSession object initialized in a temporary directory with bcpp
+    preloaded. Temp directory is cleaned up automatically
+    '''
     startup = [
         'source "{}"'.format(Path(BCPP).resolve()),
         '_bcpp --defaults',
@@ -123,11 +134,3 @@ def bash():
         )
         shell.tmpdir = tmpdir
         yield shell
-
-class TestInvocation:
-
-    def test_simple(self):
-        assert 1 == 1
-
-    def test_bash(self, bash):
-        import pdb; pdb.set_trace()
