@@ -3,6 +3,7 @@ import platform
 import re
 from itertools import chain
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import pytest
 import pexpect
@@ -115,8 +116,13 @@ def bash():
         'source {}'.format(Path(BCPP).resolve()),
         '_bcpp --defaults',
     ]
-    shell = BashSession(startup=startup)  # TODO: cwd?
-    return shell
+    with TemporaryDirectory(prefix='bcpp_test_') as tmpdir:
+        shell = BashSession(
+            startup=startup,
+            cwd=tmpdir,
+        )
+        shell.tmpdir = tmpdir
+        yield shell
 
 class TestInvocation:
 
