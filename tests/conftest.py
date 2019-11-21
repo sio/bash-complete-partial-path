@@ -115,7 +115,7 @@ class BashSession:
 BCPP = 'bash_completion'  # relative path from repo's top level
 
 
-@pytest.fixture
+@pytest.fixture(scope='class')
 def bash() -> BashSession:
     '''
     Fixture for automated tests.

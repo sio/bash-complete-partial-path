@@ -17,7 +17,7 @@ DIRS = [
 ]
 
 
-@pytest.fixture
+@pytest.fixture(scope='class')
 def bash_filetree(bash):
     '''Create filetree in bash session'''
     root = Path(bash.tmpdir)
@@ -28,13 +28,17 @@ def bash_filetree(bash):
     yield bash
 
 
-def test_simple_one_result(bash_filetree):
-    bash = bash_filetree
-    for command, completion in (
+class TestSimpleCompletion:
+    @pytest.mark.parametrize(
+        'command,completion',
+        (
             ('ls us', 'r'),
             ('cd us', 'r'),
             ('ls usr/sha', 're'),
             ('ls ', 'usr/'),
             ('cd usr/', 'share'),
-    ):
+        )
+    )
+    def test_simple_one_result(bash_filetree, command, completion):
+        bash = bash_filetree
         assert bash.complete(command) == completion
