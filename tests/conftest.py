@@ -12,6 +12,8 @@ from tempfile import TemporaryDirectory
 import pytest
 import pexpect
 
+import tests.logging
+
 
 if platform.system() == 'Windows':  # ptys are not available in Windows
     raise RuntimeError('Automated tests can not be executed on Windows '
@@ -116,7 +118,7 @@ BCPP = 'bash_completion'  # relative path from repo's top level
 
 
 @pytest.fixture(scope='class')
-def bash() -> BashSession:
+def bash(log) -> BashSession:
     '''
     Fixture for automated tests.
 
@@ -127,6 +129,7 @@ def bash() -> BashSession:
         'source "{}"'.format(Path(BCPP).resolve()),
         '_bcpp --defaults',
     ]
+    log.debug('Creating bash fixture')
     with TemporaryDirectory(prefix='bcpp_test_') as tmpdir:
         shell = BashSession(
             startup=startup,
@@ -134,3 +137,9 @@ def bash() -> BashSession:
         )
         shell.tmpdir = tmpdir
         yield shell
+    log.debug('Destroying bash fixture')
+
+
+@pytest.fixture(scope='session')
+def log():
+    return tests.logging.setup()
