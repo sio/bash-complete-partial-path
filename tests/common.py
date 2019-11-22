@@ -53,7 +53,7 @@ class BashSession:
             env=environment,
             encoding=self.ENCODING,
             dimensions=(24, 160),  # https://github.com/scop/bash-completion/blob/fb46fed657d6b6575974b2fd5a9b6529ed2472b7/test/t/conftest.py#L112-L115
-            **ka,
+            **ka
         )
         for command in chain(self.STARTUP, startup or ()):
             self.execute(command)
