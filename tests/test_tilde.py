@@ -7,6 +7,7 @@ https://www.gnu.org/software/bash/manual/html_node/Tilde-Expansion.html
 from getpass import getuser
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import os.path
 
 import pytest
 
@@ -14,7 +15,7 @@ import pytest
 @pytest.mark.parametrize('tilde', ['~', '~{}'.format(getuser())])
 def test_home(bash, tilde):
     '''~, ~username expansion'''
-    home = Path.home()
+    home = Path(os.path.expanduser('~'))  # Path.home() is unavailable in Python 3.4
     subdir = Path('foo/bar/baz')
     with TemporaryDirectory(prefix='.bcpp-test-', dir=str(home)) as tmpdir:
         testdir = home / tmpdir / subdir
