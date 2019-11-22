@@ -3,12 +3,13 @@ REQUIREMENTS_TXT=tests/requirements.txt
 SED?=sed
 
 
-test: venv deps
+test: deps venv
 	$(VENV)/pytest $(PYTEST_ARGS)
 
 
 .PHONY: deps
 deps:
+	$(MAKE) --version
 	$(PY) --version
 	$(SED) --version
 	bash --version
