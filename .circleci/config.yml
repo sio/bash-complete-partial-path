@@ -2,12 +2,12 @@ version: '2.1'
 
 
 executors:
-  debian-10:
+  docker-image:
+    parameters:
+      tag:
+        type: string
     docker:
-      - image: potyarkin/bcpp:debian-10
-  debian-9:
-    docker:
-      - image: potyarkin/bcpp:debian-9
+      - image: potyarkin/bcpp:<< parameters.tag >>
 
 
 commands:
@@ -22,8 +22,11 @@ jobs:
   test:
     parameters:
       runner:
-        type: executor
-    executor: << parameters.runner >>
+        type: string
+    description: test-<< parameters.runner >>
+    executor:
+      name: docker-image
+      tag: << parameters.runner >>
     steps:
       - checkout
       - run_tests
