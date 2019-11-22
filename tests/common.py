@@ -31,6 +31,7 @@ class BashSession:
     STARTUP = [
         "bind 'set bell-style none'",
     ]
+    COLOR_CODE = re.compile('\x1b' r'\[(?:(?:\d{0,3};?){1,4}m|K)')
 
     def __init__(self, *a,
                  cmd='bash',
@@ -57,7 +58,7 @@ class BashSession:
         for command in chain(self.STARTUP, startup or ()):
             self.execute(command)
 
-    def complete(self, text, tabs=1):
+    def complete(self, text, tabs=1, drop_colors=True):
         '''
         Trigger completion after inputting text into interactive bash session
 
@@ -82,6 +83,9 @@ class BashSession:
                 break
         if backspaces:  # handle BACKSPACE characters in the beginning of completion
             output = text[:-backspaces] + output[backspaces:]
+
+        if drop_colors:
+            output = self._clean_color_codes(output)
 
         proc.sendcontrol('c')  # drop current input
         proc.expect_exact(self.PS1)
@@ -116,3 +120,7 @@ class BashSession:
         '''Clear any input on the current line <https://askubuntu.com/a/471023>'''
         self.process.sendcontrol('e')
         self.process.sendcontrol('u')
+
+    def _clean_color_codes(self, text):
+        '''Remove escape sequences for color codes from text'''
+        return self.COLOR_CODE.sub('', text)
