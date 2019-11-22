@@ -11,10 +11,14 @@ executors:
 
 
 commands:
-  run_tests:
+  run-tests:
+    parameters:
+      runner:
+        type: string
+        default: default
     steps:
       - run:
-          name: Execute automated tests
+          name: Execute automated tests (<< parameters.runner >>)
           command: make test
 
 
@@ -29,14 +33,17 @@ jobs:
       tag: << parameters.runner >>
     steps:
       - checkout
-      - run_tests
+      - run-tests:
+          runner: << parameters.runner >>
 
 
 workflows:
   version: '2'
-  all_tests:
+  all-tests:
     jobs:
       - test:
+          name: test-debian-10
           runner: debian-10
       - test:
+          name: test-debian-9
           runner: debian-9
