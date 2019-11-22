@@ -9,10 +9,13 @@ Execute `make test` from repo's top directory
 Test environment needs to provide:
 
 - Python 3.4+
-- Curl
 - GNU Make
+- Curl
+- sha256sum (from GNU Coreutils)
+
+_* curl and sha256sum may be avoided if you fetch Makefile.venv manually_
 
 And all of bash-complete-partial-path dependencies:
 
-- Bash
+- GNU Bash
 - GNU Sed

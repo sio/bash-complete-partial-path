@@ -22,5 +22,14 @@ jobs:
         run: sudo apt install python3-venv
         if: matrix.os == 'ubuntu-latest'
 
-      - name: Execute automated tests ({{ matrix.os }})
+      - name: Install GNU components
+        run: brew install coreutils gnu-sed
+        if: matrix.os == 'macos-latest'
+
+      - name: Specify sed command
+        run: echo "::set-env name=SED::gsed"
+        if: matrix.os == 'macos-latest'
+        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/development-tools-for-github-actions#set-an-environment-variable-set-env
+
+      - name: Execute automated tests
         run:  make test
