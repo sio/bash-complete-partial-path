@@ -16,7 +16,7 @@ def test_home(bash, tilde):
     '''~, ~username expansion'''
     home = Path.home()
     subdir = Path('foo/bar/baz')
-    with TemporaryDirectory(prefix='.bcpp-test-', dir=home) as tmpdir:
+    with TemporaryDirectory(prefix='.bcpp-test-', dir=str(home)) as tmpdir:
         testdir = home / tmpdir / subdir
         testdir.mkdir(parents=True)
         assert testdir.exists()
