@@ -1,0 +1,20 @@
+version: '2.1'
+
+
+jobs:
+  test:
+    docker:
+      - image: potyarkin/bcpp:debian-10
+
+    steps:
+      - checkout
+      - run:
+          name: Execute automated tests
+          command: make test
+
+
+workflows:
+  version: '2'
+  test:
+    jobs:
+      - test

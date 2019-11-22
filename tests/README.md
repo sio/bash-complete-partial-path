@@ -9,6 +9,7 @@ Execute `make test` from repo's top directory
 Test environment needs to provide:
 
 - Python 3.4+
+- Curl
 - GNU Make
 
 And all of bash-complete-partial-path dependencies:
