@@ -8,6 +8,9 @@ executors:
         type: string
     docker:
       - image: potyarkin/bcpp:<< parameters.tag >>
+    environment:
+      PIP_CACHE_DIR: ~/pip-cache
+      VENVDIR: ~/venv
 
 
 commands:
@@ -16,10 +19,22 @@ commands:
       runner:
         type: string
         default: default
+      cache_uid:
+        type: string
+        default: '1'  # increment this value to drop caches
     steps:
+      - restore_cache:
+          keys:
+            - cache-v<< parameters.cache_uid >>-{{ arch }}-<< parameters.runner >>-{{ checksum "tests/requirements.txt" }}
+            - cache-v<< parameters.cache_uid >>-{{ arch }}-<< parameters.runner >>-
       - run:
           name: Execute automated tests (<< parameters.runner >>)
           command: make test
+      - save_cache:
+          key: cache-v<< parameters.cache_uid >>-{{ arch }}-<< parameters.runner >>-{{ checksum "tests/requirements.txt" }}
+          paths:
+            - ~/pip-cache
+            - ~/venv
 
 
 jobs:
