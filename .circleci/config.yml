@@ -42,8 +42,14 @@ workflows:
   all-tests:
     jobs:
       - test:
+          name: test-debian-11
+          runner: debian-11
+      - test:
           name: test-debian-10
           runner: debian-10
       - test:
           name: test-debian-9
           runner: debian-9
+      - test:
+          name: test-debian-8
+          runner: debian-8
