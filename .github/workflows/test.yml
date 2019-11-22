@@ -1,0 +1,26 @@
+name: ci/github
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '.git*'
+
+
+jobs:
+  test:
+    name: test-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install OS packages for Python
+        run: sudo apt install python3-venv
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: Execute automated tests ({{ matrix.os }})
+        run:  make test
