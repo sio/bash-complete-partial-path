@@ -1,20 +1,39 @@
 version: '2.1'
 
 
-jobs:
-  test:
+executors:
+  debian-10:
     docker:
       - image: potyarkin/bcpp:debian-10
+  debian-9:
+    docker:
+      - image: potyarkin/bcpp:debian-9
 
+
+commands:
+  run_tests:
     steps:
-      - checkout
       - run:
           name: Execute automated tests
           command: make test
 
 
+jobs:
+  test:
+    parameters:
+      runner:
+        type: executor
+    executor: << parameters.runner >>
+    steps:
+      - checkout
+      - run_tests
+
+
 workflows:
   version: '2'
-  test:
+  all_tests:
     jobs:
-      - test
+      - test:
+          runner: debian-10
+      - test:
+          runner: debian-9
