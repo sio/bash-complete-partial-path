@@ -7,6 +7,11 @@ test: deps venv
 	$(VENV)/pytest $(PYTEST_ARGS)
 
 
+lint:
+	shellcheck --version
+	shellcheck bash_completion
+
+
 .PHONY: deps
 deps:
 	$(MAKE) --version
