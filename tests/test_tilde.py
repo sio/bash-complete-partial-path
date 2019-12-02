@@ -31,4 +31,4 @@ def test_pushd(bash):
     '''~1, ~2 expansion'''
     bash.execute('pushd usr')
     directory = Path('usr/share/applications')
-    assert bash.complete('ls ~1/u/s/app') == 'ls {}'.format(bash.tmpdir / directory)
+    assert bash.complete('ls ~1/u/s/app') == 'ls {}'.format((bash.tmpdir / directory).resolve())
