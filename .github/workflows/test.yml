@@ -7,25 +7,14 @@ on:
 
 
 jobs:
-  test-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-
-      - name: Install OS packages for Python
-        run: sudo apt install python3-venv
-        if: matrix.os == 'ubuntu-latest'
-
-      - name: Execute automated tests
-        run:  make test
-
   test-macos:
+    name: test-macos (${{ matrix.bash-version }})
     runs-on: macos-latest
     strategy:
       matrix:
-        update-bash:
-          - yes
-          - no
+        bash-version:
+          - bash-latest
+          - bash-default
     steps:
       - uses: actions/checkout@v1
 
@@ -34,7 +23,7 @@ jobs:
 
       - name: Update GNU Bash
         run: brew install bash
-        if: matrix.update-bash
+        if: matrix.bash-version == 'bash-latest'
 
       - name: Specify sed command
         run: echo "::set-env name=SED::gsed"
@@ -42,4 +31,4 @@ jobs:
 
       - name: Execute automated tests
         run:  make test
-        if: matrix.update-bash  # Default macOS bash version (3.2) is not yet supported
+        if: matrix.bash-version == 'bash-latest'  # TODO: Default macOS bash version (3.2) is not yet supported
