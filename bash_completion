@@ -155,7 +155,7 @@ _bcpp_complete() {
 
     # Collect completion options
     local pipe
-    pipe=$(mktemp -u --tmpdir 'bcpp_pipe_XXXXXXXX')
+    pipe="$_BCPP_FIFO"
     mkfifo -m 600 "$pipe"
 
     local monitor
@@ -362,4 +362,7 @@ _bcpp() {
         bind 'set show-all-if-ambiguous on'
         bind 'set show-all-if-unmodified on'
     fi
+
+    # Calculate location for fifo file
+    _BCPP_FIFO=$(mktemp -u --tmpdir 'bcpp_pipe_XXXXXXXX' 2>/dev/null || mktemp -u -t 'bcpp_pipe')
 }
