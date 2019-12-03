@@ -12,6 +12,9 @@ lint:
 	shellcheck bash_completion
 
 
+clean: clean-venv
+
+
 .PHONY: deps
 deps:
 	$(MAKE) --version
