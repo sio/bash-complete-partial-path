@@ -156,6 +156,7 @@ _bcpp_complete() {
     # Collect completion options
     local pipe
     pipe="$_BCPP_FIFO"
+    [[ -z "$pipe" ]] && return 1  # fail on empty filename
     mkfifo -m 600 "$pipe"
 
     local monitor
