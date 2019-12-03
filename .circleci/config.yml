@@ -68,3 +68,6 @@ workflows:
       - test:
           name: test-debian-8
           runner: debian-8
+      - test:
+          name: test-centos-7
+          runner: centos-7
