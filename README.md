@@ -1,5 +1,13 @@
 # Enhanced file path completion in bash
 
+
+[![Linux test status](https://img.shields.io/circleci/build/gh/sio/bash-complete-partial-path?label=linux-test)][badge-link]
+[![macOS test status](https://img.shields.io/github/workflow/status/sio/bash-complete-partial-path/ci-github?label=macos-test)][badge-link]
+[![Windows test status](https://img.shields.io/badge/windows--test-manual-yellow)][badge-link]
+
+[badge-link]: tests/README.md
+
+
 This project adds incomplete file path expansion to bash (the feature that was
 originally unique to zsh).
 
