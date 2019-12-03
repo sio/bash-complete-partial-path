@@ -64,6 +64,18 @@ fi
 Make sure you source this project *after* the main bash-completion which may be
 included in your  `~/.bashrc` file.
 
+
+## Runtime requirements
+
+To use this completion script make sure your OS provides the following
+dependencies:
+
+- GNU Bash, version 4 or newer (version 3.2 is not yet supported, see
+  [#8](https://github.com/sio/bash-complete-partial-path/issues/8))
+- GNU Sed (install it with brew on macOS)
+- Core unix-like userland (mktemp, mkfifo, rm)
+
+
 ## Custom feature selection
 
 If you like the project idea overall but do not agree with default behavior,
@@ -194,7 +206,7 @@ of useful debugging information
 
 #### Automated testing
 
-Not implemented yet, but technically possible via Python + pexpect. See #11
+Tests are implemented with Python and Pexpect. [Read more here](tests/README.md)
 
 
 ## License and copyright
