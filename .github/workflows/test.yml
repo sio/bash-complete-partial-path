@@ -1,4 +1,4 @@
-name: ci/github
+name: ci-github
 on:
   push:
     paths-ignore:
