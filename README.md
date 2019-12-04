@@ -55,7 +55,7 @@ the script to the default location (requires `curl` to be installed).
 mkdir -p "$HOME/.config/bash-complete-partial-path/" && \
 curl \
  -o "$HOME/.config/bash-complete-partial-path/bash_completion" \
- "https://raw.githubusercontent.com/sio/bash-complete-partial-path/master/bash_completion"
+ "https://raw.githubusercontent.com/sio/bash-complete-partial-path/stable/bash_completion"
 ```
 
 To enable the new completion behavior put the following lines into your

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 #
+# bash-complete-partial-path                                    v1.0.0
+#
 # Zsh-like expansion of incomplete file paths for Bash.
 # Source this file from your ~/.bashrc and use `_bcpp --defaults`
 # to enable the described behavior.
