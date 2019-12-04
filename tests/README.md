@@ -56,8 +56,13 @@ Automated tests are continuously executed after each push to this repo.
   Actions]:
     - macOS 10.15: bash 5.0, sed 4.7 *(these numbers will change - packages
       are automatically updated to the latest version in each CI run)*
+- **FreeBSD** tests are executed in Google Cloud Platfom [VM images] on
+  infrastructure provided by [Cirrus CI]:
+    - FreeBSD 12.1: bash 5.0, sed 4.7 *(automatically updated in each CI run)*
 
 [CircleCI]: https://circleci.com/
 [GitHub Actions]: https://github.com/features/actions
 [Docker containers]: docker/README.md
 [virtual environment]: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/software-installed-on-github-hosted-runners#macos-1015
+[VM images]: https://cirrus-ci.org/guide/FreeBSD/
+[Cirrus CI]: https://cirrus-ci.org/
