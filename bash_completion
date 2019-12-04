@@ -41,7 +41,7 @@ _bcpp_sed_detect() {
             echo "Completion script requires GNU sed, please install it with brew" >&2
         fi
     fi
-    echo "$SED"
+    echo "command $SED"
 }
 _BCPP_SED=$(_bcpp_sed_detect)
 
@@ -85,7 +85,7 @@ _bcpp_put_wildcards() {
 # https://stackoverflow.com/a/51061046
 _bcpp_silent_bg() {
     { 2>&3 "$@"& } 3>&2 2>/dev/null
-    disown &>/dev/null  # Prevent whine if job has already completed
+    builtin disown &>/dev/null  # Prevent whine if job has already completed
     return 0  # do not clutter $? value (last exit code)
 }
 
@@ -157,7 +157,7 @@ _bcpp_complete() {
     local pipe
     pipe="$_BCPP_FIFO"
     [[ -z "$pipe" ]] && return 1  # fail on empty filename
-    mkfifo -m 600 "$pipe"
+    command mkfifo -m 600 "$pipe"
 
     local monitor
     [[ "$-" == *m* ]] && monitor=yes || monitor=no
@@ -180,7 +180,7 @@ _bcpp_complete() {
         fi
         COMPREPLY+=("$LINE")
     done < "$pipe"
-    rm "$pipe"
+    command rm "$pipe"
     [[ "$monitor" == yes ]] && set -m
 }
 

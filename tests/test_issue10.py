@@ -7,7 +7,7 @@ https://github.com/sio/bash-complete-partial-path/issues/10
 import shlex
 import pytest
 
-from tests.conftest import FILETREE
+from tests.conftest import FILETREE, STARTUP
 
 
 class Test_Issue10:
@@ -40,3 +40,12 @@ class Test_Issue10:
         else:
             assert False, 'unsupported command: {}'.format(command)
 
+
+def test_aliases(bash):
+    '''Do not use aliases for dependencies'''
+    message = 'ALIASES MUST NOT BE INVOKED'
+    bash.execute('alias rm="echo {}"'.format(message))
+    for command in STARTUP:  # reinitialize bash-complete-partial-path
+        bash.execute(command)
+    assert bash.execute('rm --help') == message + ' --help'
+    assert bash.complete('ls us') == 'r'
