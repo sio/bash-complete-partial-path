@@ -1,0 +1,30 @@
+# FreeBSD CI environment provided by Cirrus CI: https://cirrus-ci.org/
+
+task:
+  name: 'ci/cirrusci: test-freebsd'
+  freebsd_instance:
+    image_family: freebsd-12-1
+  env:
+    SED: gsed
+    PIP_CACHE_DIR: $CIRRUS_WORKING_DIR/cache/pip
+    # VENVDIR should not be cached: Cirrus CI drops bin/python for some reason when saving cache
+  venv_cache:
+    folder: cache
+    fingerprint_script:
+      - echo "Cache ID: 1"
+      - cat tests/requirements.txt
+  before_script:
+    - pkg update
+    - pkg install -y
+        python3
+        gmake
+        curl
+        coreutils
+        bash
+        gsed
+    - ln -s /usr/local/bin/gsha256sum /bin/sha256sum
+    - pw useradd -n testuser -m -w random
+    - chown -R testuser .
+  test_script:
+    - su testuser -c 'gmake test'
+
