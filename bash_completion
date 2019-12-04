@@ -32,18 +32,17 @@ _bcpp_sed_detect() {
     local SED GNU_SED
     SED="sed"
     GNU_SED="gsed" # macOS ships BSD sed by default, gnu-sed has to be installed with brew
-    if [[ $OSTYPE == darwin* ]]
+    if [[ $OSTYPE == darwin* || $OSTYPE == freebsd* ]]
     then
         if type "$GNU_SED" &> /dev/null
         then
             SED="$GNU_SED"
         else
-            echo "Completion script requires GNU sed, please install it with brew" >&2
+            echo "bash-complete-partial-path: Please install GNU sed (gsed)" >&2
         fi
     fi
     echo "command $SED"
 }
-_BCPP_SED=$(_bcpp_sed_detect)
 
 
 #
@@ -366,4 +365,7 @@ _bcpp() {
 
     # Calculate location for fifo file
     _BCPP_FIFO=$(mktemp -u --tmpdir 'bcpp_pipe_XXXXXXXX' 2>/dev/null || mktemp -u -t 'bcpp_pipe')
+
+    # Detect sed command
+    _BCPP_SED=$(_bcpp_sed_detect)
 }
