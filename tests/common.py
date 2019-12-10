@@ -26,11 +26,19 @@ class BashSession:
     '''Wrapper for interactive bash session'''
 
     ENCODING = 'utf-8'
-    MARKER = '>>-!-<<'
-    PS1 = '__>>>__'
     STARTUP = [
         "bind 'set bell-style none'",
     ]
+    ENV_UNSET = [
+        # The following variables will be unset in test environment
+    ]
+    ENV_FORCE = {
+        # The following variables will be force overwritten with these values
+        'PS1': '__>>>__',
+        'TERM': 'dumb',
+        'HISTFILE': '/dev/null',  # Do not write history for test sessions
+    }
+    MARKER = '>>-!-<<'
     COLOR_CODE = re.compile('\x1b' r'\[(?:(?:\d{0,3};?){1,4}m|K)')
 
     def __init__(self, *a,
@@ -41,13 +49,15 @@ class BashSession:
                  **ka):
         if a:
             raise ValueError('only keyword arguments are supported')
+        self.PS1 = self.ENV_FORCE['PS1']
+
         environment = os.environ.copy()
+        for variable in self.ENV_UNSET:
+            environment.pop(variable, None)
         if env:
             environment.update(env)
-        environment.update(dict(
-            PS1=self.PS1,
-            TERM='dumb',
-        ))
+        environment.update(self.ENV_FORCE)
+
         self.process = pexpect.spawn(
             '{} {}'.format(cmd, args),
             env=environment,
