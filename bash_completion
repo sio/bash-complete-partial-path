@@ -129,9 +129,6 @@ _bcpp_complete() {
 
     # Prepare the reply
     COMPREPLY=()
-    compopt -o nospace
-    compopt -o bashdefault
-    compopt -o default
 
     # If input is already a valid path, do not try to be clever
     if [[ -e "$INPUT" ]]
@@ -193,7 +190,7 @@ _bcpp_complete_file() { _bcpp_complete file; }
 
 # Manage enhanced path completion
 _bcpp() {
-    local DEFAULT ALL KEYS ARG USAGE UNKNOWN
+    local DEFAULT ALL KEYS ARG USAGE UNKNOWN COMP_OPTIONS
 
     DEFAULT="--files --dirs --cooperate --nocase --readline"
     ALL="--files --dirs --cooperate --nocase --readline"
@@ -242,6 +239,7 @@ _bcpp() {
         "to the extent permitted by applicable law. For more information see:"
         "<http://www.apache.org/licenses/LICENSE-2.0>"
     )
+    COMP_OPTIONS="-o nospace -o bashdefault -o default"
 
     # Modify selected features list
     for ARG in "$@"
@@ -336,12 +334,12 @@ _bcpp() {
     then
         # Do not overwrite default completion function if dynamic completion
         # loader is enabled
-        [[ -z "$DYNAMIC" ]] && complete -D -F _bcpp_complete_file
+        [[ -z "$DYNAMIC" ]] && complete -D $COMP_OPTIONS -F _bcpp_complete_file
     fi
     if [[ "$KEYS" == *d* ]]  # --dirs
     then
-        complete -F _bcpp_complete_dir cd
-        complete -F _bcpp_complete_dir pushd
+        complete $COMP_OPTIONS -F _bcpp_complete_dir cd
+        complete $COMP_OPTIONS -F _bcpp_complete_dir pushd
     fi
     if [[ "$KEYS" == *c* ]]  # --nocase
     then
