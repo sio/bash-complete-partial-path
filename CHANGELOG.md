@@ -1,5 +1,10 @@
 # Release history for bash-complete-partial-path
 
+## v1.1.0-dev (unreleased)
+
+Development version. Work is being done on adding support for bash 3.2 (issue #8)
+
+
 ## v1.0.0 (2019-12-04)
 
 The project has been around for a long time, but no formal releases were
