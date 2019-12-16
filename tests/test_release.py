@@ -17,6 +17,13 @@ VERSION = re.compile(r'\b(v\d+\.\d+\.\d(?:-[\w\d]+|\b))')  # semver
 skipif_no_git = pytest.mark.skipif(not which('git'), reason='git not found in $PATH')
 
 
+def skip_development_versions(message=None):
+    '''Skip some tests on development versions'''
+    app_version = read_version(BCPP, lines=5)
+    if app_version.endswith('-dev'):
+        pytest.skip(message or 'skip checks for -dev versions')
+
+
 def run(command, **ka):
     '''Backwards compatible subprocess runner'''
     process = Popen(command, **ka)
@@ -56,10 +63,8 @@ def test_readme_changelog():
 @skipif_no_git
 def test_git_tag():
     '''Compare version numbers in main script and git tag'''
+    skip_development_versions()
     app_version = read_version(BCPP, lines=5)
-    if app_version.endswith('-dev'):
-        pytest.skip('not checking git tag for -dev versions')
-
     command = 'git log -1 --format=%D --'.split() + [BCPP]
     output = run(command, stdout=PIPE)
     match = VERSION.search(output)
@@ -72,6 +77,7 @@ def test_git_tag():
 @skipif_no_git
 def test_git_stable():
     '''Check that git stable tag points to the latest CHANGELOG entry'''
+    skip_development_versions()
     stable = read_git_ref('stable')
     changelog = read_git_ref(read_version(CHANGELOG, lines=5))
     assert stable == changelog
