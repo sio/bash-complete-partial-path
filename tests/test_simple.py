@@ -46,8 +46,4 @@ class TestPathCompletion:
         '''Complete ambiguous paths'''
         completed = bash.complete(command)
         assert completed, 'empty completion'
-        for variant in variants:
-            assert variant in completed
-        for variant in variants:
-            completed = completed.replace(variant, '')
-        assert not completed.strip(), 'extra output in completion results'
+        assert set(variants) == set(completed)

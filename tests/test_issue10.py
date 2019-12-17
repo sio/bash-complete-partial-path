@@ -4,7 +4,6 @@ https://github.com/sio/bash-complete-partial-path/issues/10
 '''
 
 
-import shlex
 import pytest
 
 from tests.conftest import FILETREE, STARTUP
@@ -25,7 +24,7 @@ class Test_Issue10:
     def test_double(self, bash, command):
         '''Check that double tab lists directory contents'''
         completed = bash.complete('{} {}'.format(command, self.DIR), tabs=2)
-        variants = set(shlex.split(completed))
+        variants = set(completed)
         files = set(x for x in FILETREE['files'] if x.startswith(self.DIR))
         dirs  = set(x for x in FILETREE['dirs'] if x.startswith(self.DIR))
 
