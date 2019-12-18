@@ -11,6 +11,11 @@ ENV_SCOP = 'BCPP_TEST_SCOP_COMPLETION'
 def test_scop_completion(bash):
     '''Test compatibility with main bash-completion package'''
     bash.execute('exec bash --norc --noprofile')
+
+    declare = bash.execute('declare -F')
+    assert '_filedir' not in declare
+    assert '_bcpp_filedir' not in declare
+
     bash.execute('source "${}"'.format(ENV_SCOP))
     for cmd in STARTUP:
         bash.execute(cmd)
