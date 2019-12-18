@@ -28,8 +28,10 @@ def test_env_clean():
     declare = re.compile(r'^declare\b(?:\s+\-\S+)+\s+')
     env_item = re.compile(declare.pattern + r'(\w+)')
 
-    ignore_items = {  # changes to variables from this set are ignored
-        'BASHOPTS',
+    ignore_items = {  # Changes to variables from this set are ignored
+        'BASHOPTS',   # - meant to be modified by _bcpp
+        'BASH_ARGC',  # - volatile, modified almost always
+        'BASH_ARGV',  # - volatile, modified almost always
     }
 
     bash = BashSession()
