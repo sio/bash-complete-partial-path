@@ -66,3 +66,47 @@ Automated tests are continuously executed after each push to this repo.
 [virtual environment]: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/software-installed-on-github-hosted-runners#macos-1015
 [VM images]: https://cirrus-ci.org/guide/FreeBSD/
 [Cirrus CI]: https://cirrus-ci.org/
+
+
+## Test configuration
+
+### Modifying test runner behavior
+
+The following environment variables affect behavior of test runner:
+
+- **BCPP_TEST_DEBUG** -
+  If this variable is set, PDB session will be activated by one of the test
+  cases. Standard `bash` fixture will be available in that session.
+- **BCPP_TEST_LOG_FILE** -
+  Path to the file where test debug messages will be saved.
+- **BCPP_TEST_LOG_STDOUT** -
+  Print test debug messages to stdout. Pytest shows stdout only for failed
+  tests by default, see [documentation](https://docs.pytest.org/en/latest/capture.html).
+- **BCPP_TEST_SCOP_COMPLETION** -
+  Path to scop/bash-completion script for compatibility testing. If this
+  variable is not set the corresponding tests will be skipped.
+
+Check if the list above is up to date:
+
+```
+$ git grep -woEh 'BCPP\w+' tests/|sort -u
+```
+
+### Passing extra arguments to pytest
+
+Use **PYTEST_ADDOPTS**
+([documentation](http://doc.pytest.org/en/latest/customize.html#adding-default-options)):
+
+- Stopping after the first failure: `make test PYTEST_ADDOPTS=-x`
+- Running specific test: `make test PYTEST_ADDOPTS='-k test_case_or_suite_name'`
+- Dropping into PDB on failures: `make test PYTEST_ADDOPTS=--pdb`
+- Other examples:
+
+```
+$ make test PYTEST_ADDOPTS=-x
+$ make test PYTEST_ADDOPTS=-xv
+$ make test PYTEST_ADDOPTS='-xv -k TestShortcuts'
+$ make test PYTEST_ADDOPTS='-xvv -k test_case'
+$ make test PYTEST_ADDOPTS='-xvv -k test_env_clean'
+$ make test PYTEST_ADDOPTS='-xvv -k test_env_clean --pdb'
+```
