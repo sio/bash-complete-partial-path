@@ -71,3 +71,6 @@ workflows:
       - test:
           name: test-centos-7
           runner: centos-7
+      - test:
+          name: test-scop-completion
+          runner: scop
