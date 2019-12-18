@@ -15,10 +15,13 @@ class ShyLogHandler(logging.StreamHandler):
 
 
 def setup():
+    log = logging.getLogger('bcpp_tests')
+    if getattr(log, 'initialized', False):
+        return log
+
     log_file = os.environ.get('BCPP_TEST_LOG_FILE')
     log_stdout = os.environ.get('BCPP_TEST_LOG_STDOUT')
 
-    log = logging.getLogger('bcpp_tests')
     log.level = logging.DEBUG
 
     if log_file:
@@ -32,4 +35,5 @@ def setup():
         handler.level = logging.DEBUG
         log.addHandler(handler)
 
+    log.initialized = True
     return log
