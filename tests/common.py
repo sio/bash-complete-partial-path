@@ -68,7 +68,7 @@ class BashSession:
         for command in chain(self.STARTUP, startup or ()):
             self.execute(command)
 
-    def complete(self, text, tabs=1, drop_colors=True):
+    def complete(self, text, tabs=1, custom_tabs='', drop_colors=True):
         '''
         Trigger completion after inputting text into interactive bash session
 
@@ -77,7 +77,7 @@ class BashSession:
         self._clear_current_line()
 
         proc = self.process
-        proc.send('{}{}'.format(text, '\t' * tabs))
+        proc.send('{}{}'.format(text, custom_tabs or '\t' * tabs))
         proc.expect_exact(text)
         proc.send(self.MARKER)
         match = proc.expect(re.escape(self.MARKER))
