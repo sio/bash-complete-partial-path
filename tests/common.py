@@ -105,6 +105,9 @@ class BashSession:
         proc.expect_exact(echo, timeout=timeout)
         proc.expect_exact(self.PS1, timeout=timeout)
         returned = proc.before.strip()
+        if not returned:
+            returned = '0'  # macOS allows empty exit codes apparently:
+                            # https://github.com/sio/bash-complete-partial-path/runs/354401396
         if str(exitcode) != returned:
             message = '{command} exited with code {returned} (expected {exitcode})\n{output}'
             raise BashSessionError(message.format(**locals()))
