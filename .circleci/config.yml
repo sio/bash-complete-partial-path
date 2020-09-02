@@ -21,7 +21,7 @@ commands:
         default: default
       cache_uid:
         type: string
-        default: '1'  # increment this value to drop caches
+        default: '2'  # increment this value to drop caches
     steps:
       - restore_cache:
           keys:
@@ -34,7 +34,6 @@ commands:
           key: cache-v<< parameters.cache_uid >>-{{ arch }}-<< parameters.runner >>-{{ checksum "tests/requirements.txt" }}
           paths:
             - ~/pip-cache
-            - ~/venv
 
 
 jobs:
