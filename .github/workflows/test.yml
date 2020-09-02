@@ -9,6 +9,30 @@ on:
 
 
 jobs:
+  test-linux:
+    runs-on: ubuntu-latest
+    name: test-${{ matrix.image }}
+    container: ghcr.io/sio/bash-complete-partial-path:${{ matrix.image }}
+    strategy:
+      matrix:
+        image:
+          - bash-3.2
+          - centos-7
+          - debian-8
+          - debian-9
+          - debian-10
+          - debian-11
+          - scop
+    env:
+      PIP_CACHE_DIR: cache/pip
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: cache
+          key: cache-v1-${{ runner.os }}-${{ matrix.image }}-${{ hashFiles('tests/requirements.txt') }}
+      - run: make test
+
   test-macos:
     runs-on: macos-latest
     name: test-macos (bash-latest)
