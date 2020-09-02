@@ -16,7 +16,6 @@ jobs:
     strategy:
       matrix:
         image:
-          - bash-3.2
           - centos-7
           - debian-8
           - debian-9
