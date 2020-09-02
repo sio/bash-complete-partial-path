@@ -15,7 +15,7 @@ import pytest
 @pytest.mark.parametrize('tilde', ['~', '~{}'.format(getuser())])
 def test_home(bash, tilde):
     '''~, ~username expansion'''
-    home = Path(os.path.expanduser('~'))  # Path.home() is unavailable in Python 3.4
+    home = Path(os.path.expanduser(tilde))  # Path.home() is unavailable in Python 3.4
     subdir = Path('foo/bar/baz')
     with TemporaryDirectory(prefix='.bcpp-test-', dir=str(home)) as tmpdir:
         testdir = home / tmpdir / subdir
