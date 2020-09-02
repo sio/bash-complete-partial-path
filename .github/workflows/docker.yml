@@ -7,6 +7,9 @@ on:
     branches:
       - develop  # TODO: remove this line
       - dockerhub
+      - master
+    paths:
+      - tests/docker/*.Dockerfile
   schedule:
     - cron: '45 3 4,14,24 * *'
 
