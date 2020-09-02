@@ -21,7 +21,7 @@ jobs:
 
       - name: Build image and push it to registry
         run: |
-          export DOCKERFILE=tests/docker/$DOCKER_TAG/.Dockerfile
+          export DOCKERFILE=tests/docker/$DOCKER_TAG.Dockerfile
           echo ${{ secrets.CONTAINER_REGISTRY_PERSONAL_ACCESS_TOKEN }} \
           | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
           docker build --pull --tag $DOCKER_REPO:$DOCKER_TAG - < $DOCKERFILE
