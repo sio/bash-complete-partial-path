@@ -13,15 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_TAG: scop
-      DOCKERFILE: tests/docker/${{ env.DOCKER_TAG }}.Dockerfile
-      DOCKER_REPO: ghcr.io/${{ env.GITHUB_ACTOR }}/bash-complete-partial-path
-      DOCKER_USER: ${{ env.GITHUB_ACTOR }}
+      DOCKER_REPO: ghcr.io/sio/bash-complete-partial-path
+      DOCKER_USER: sio
       DOCKER_REGISTRY: ghcr.io
     steps:
       - uses: actions/checkout@v1
 
       - name: Build image and push it to registry
         run: |
+          export DOCKERFILE=tests/docker/$DOCKER_TAG/.Dockerfile
           echo ${{ secrets.CONTAINER_REGISTRY_PERSONAL_ACCESS_TOKEN }} \
           | docker login -u $DOCKER_USER --password-stdin $DOCKER_REGISTRY
           docker build --pull --tag $DOCKER_REPO:$DOCKER_TAG - < $DOCKERFILE
