@@ -4,6 +4,8 @@ on:
     paths-ignore:
       - '**.md'
       - '.git*'
+  schedule:
+    - cron: '45 3 5,15,25 * *'
 
 
 jobs:
