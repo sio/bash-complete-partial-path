@@ -37,3 +37,12 @@ Makefile.venv:
 	echo "5afbcf51a82f629cd65ff23185acde90ebe4dec889ef80bbdc12562fbd0b2611 *Makefile.fetched" \
 		| sha256sum --check - \
 		&& mv Makefile.fetched Makefile.venv
+
+
+# Override default venv packages for older Python versions
+# https://github.com/pypa/get-pip/pull/46/files
+ifeq (True,$(shell $(PY) -c "import sys; print(sys.version_info < (3,5))"))
+$(VENV):
+	$(PY) -m venv $(VENVDIR)
+	$(VENV)/python -m pip install --upgrade "pip<19.2" "setuptools<44.0" "wheel<0.34"
+endif
