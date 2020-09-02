@@ -40,6 +40,7 @@ class BashSession:
         'HISTFILE': '/dev/null',  # Do not write history for test sessions
     }
     MARKER = '>>-!-<<'
+    TIMEOUT = os.getenv('BCPP_TEST_PEXPECT_TIMEOUT', 60)
 
     def __init__(self, *a,
                  cmd='bash',
@@ -78,12 +79,12 @@ class BashSession:
 
         proc = self.process
         proc.send('{}{}'.format(text, custom_tabs or '\t' * tabs))
-        proc.expect_exact(text)
+        proc.expect_exact(text, timeout=self.TIMEOUT)
         proc.send(self.MARKER)
-        match = proc.expect(re.escape(self.MARKER))
+        match = proc.expect(re.escape(self.MARKER), timeout=self.TIMEOUT)
         output = proc.before.strip()
         proc.sendcontrol('c')  # drop current input
-        proc.expect_exact(self.PS1)
+        proc.expect_exact(self.PS1, timeout=self.TIMEOUT)
         return CompletionResult(command=text, output=output, prompt=self.PS1, drop_colors=drop_colors)
 
     def execute(self, command, timeout=-1, exitcode=0):
@@ -92,6 +93,9 @@ class BashSession:
 
         Return terminal output after execution.
         '''
+        if timeout == -1:
+            timeout = self.TIMEOUT
+
         self._clear_current_line()
 
         proc = self.process

@@ -81,6 +81,9 @@ The following environment variables affect behavior of test runner:
 - **BCPP_TEST_LOG_STDOUT** -
   Print test debug messages to stdout. Pytest shows stdout only for failed
   tests by default, see [documentation](https://docs.pytest.org/en/latest/capture.html).
+- **BCPP_TEST_PEXPECT_TIMEOUT** -
+  Timeout in seconds for Pexpect to wait for terminal output. Increase this
+  value if test runner is a slow or overloaded machine.
 - **BCPP_TEST_SCOP_COMPLETION** -
   Path to scop/bash-completion script for compatibility testing. If this
   variable is not set the corresponding tests will be skipped.
