@@ -7,7 +7,7 @@ executors:
       tag:
         type: string
     docker:
-      - image: potyarkin/bcpp:<< parameters.tag >>
+      - image: ghcr.io/sio/bash-complete-partial-path:<< parameters.tag >>
     environment:
       PIP_CACHE_DIR: ~/pip-cache
       VENVDIR: ~/venv
