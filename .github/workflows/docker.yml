@@ -1,6 +1,6 @@
 # Build Docker images and push them to GitHub Container Registry
 
-name: Build Docker images for testing
+name: ci/ghcr
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   docker-build:
-    name: docker-build (${{ matrix.tag }})
+    name: build-${{ matrix.tag }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
