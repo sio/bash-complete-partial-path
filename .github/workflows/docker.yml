@@ -1,18 +1,31 @@
 # Build Docker images and push them to GitHub Container Registry
 
+name: Build Docker images for testing
+
 on:
   push:
     branches:
-      - develop
+      - develop  # TODO: remove this line
       - dockerhub
-      - master
-
+  schedule:
+    - cron: '45 3 4,14,24 * *'
 
 jobs:
   docker-build:
+    name: docker-build (${{ matrix.tag }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag:
+          - bash-3.2
+          - centos-7
+          - debian-8
+          - debian-9
+          - debian-10
+          - debian-11
+          - scop
     env:
-      DOCKER_TAG: scop
+      DOCKER_TAG: ${{ matrix.tag }}
       DOCKER_REPO: ghcr.io/sio/bash-complete-partial-path
       DOCKER_USER: sio
       DOCKER_REGISTRY: ghcr.io
