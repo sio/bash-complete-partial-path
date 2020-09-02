@@ -44,7 +44,7 @@ pexpect.
 Automated tests are continuously executed after each push to this repo.
 
 - **Linux** tests are executed within [Docker containers] on the
-  infrastructure provided by [CircleCI]. The following configurations are
+  infrastructure provided by [GitHub Actions]. The following configurations are
   being tested:
     - Centos 7: bash 4.2, sed 4.2
     - Debian 8: bash 4.3, sed 4.2
@@ -60,7 +60,6 @@ Automated tests are continuously executed after each push to this repo.
   infrastructure provided by [Cirrus CI]:
     - FreeBSD 12.1: bash 5.0, sed 4.7 *(automatically updated in each CI run)*
 
-[CircleCI]: https://circleci.com/
 [GitHub Actions]: https://github.com/features/actions
 [Docker containers]: docker/README.md
 [virtual environment]: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/software-installed-on-github-hosted-runners#macos-1015
