@@ -5,7 +5,6 @@ name: ci/ghcr
 on:
   push:
     branches:
-      - develop  # TODO: remove this line
       - dockerhub
       - master
     paths:
