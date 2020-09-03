@@ -101,6 +101,9 @@ Use **PYTEST_ADDOPTS**
 - Stopping after the first failure: `make test PYTEST_ADDOPTS=-x`
 - Running specific test: `make test PYTEST_ADDOPTS='-k test_case_or_suite_name'`
 - Dropping into PDB on failures: `make test PYTEST_ADDOPTS=--pdb`
+    - While in PDB you may interact with bash session via
+      `bash.process.interact()`. Press `Ctrl+]` to detach from bash session
+      and return to PDB.
 - Other examples:
 
 ```
