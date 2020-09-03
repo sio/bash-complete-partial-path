@@ -48,7 +48,8 @@ def test_env_clean():
             item = match.group(1)
         else:
             item = content
-        if item in ignore_items:
+        if item in ignore_items \
+        or not content:
             continue
 
         error_msg = ''
