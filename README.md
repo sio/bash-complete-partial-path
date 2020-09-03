@@ -30,9 +30,11 @@ To enable the described behavior source [**this file**][main] from your
 
 Completion functions have been tested and reported to work on:
 
-- Linux (Debian 9)
+- Linux (Debian 9,10)
 - macOS (requires gnu-sed from brew)
 - Windows (MSYS)
+
+[Automated tests](tests/README.md) are performed on Linux, FreeBSD and macOS.
 
 
 ## Installation and updating
