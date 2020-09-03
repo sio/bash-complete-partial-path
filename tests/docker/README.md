@@ -10,4 +10,4 @@ Docker environments for automated testing of [bash-complete-partial-path][bcpp].
 
 [bcpp]: https://github.com/sio/bash-complete-partial-path
 [registry]: https://github.com/users/sio/packages/container/bash-complete-partial-path/versions
-[dockerfiles]: https://github.com/sio/bash-complete-partial-path/tree/dockerhub/tests/docker
+[dockerfiles]: https://github.com/sio/bash-complete-partial-path/tree/master/tests/docker
