@@ -28,6 +28,7 @@ class BashSession:
 
     ENCODING = 'utf-8'
     STARTUP = [
+        "bind 'set enable-bracketed-paste off'",
         "bind 'set bell-style none'",
     ]
     ENV_UNSET = [
