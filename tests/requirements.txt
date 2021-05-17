@@ -1,3 +1,6 @@
 pexpect
 pytest
 hypothesis
+
+# Compatibility with older Python versions
+typing; python_version < '3.5'
