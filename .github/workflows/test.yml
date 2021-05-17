@@ -31,3 +31,20 @@ jobs:
           path: cache
           key: cache-v1-${{ runner.os }}-${{ matrix.image }}-${{ hashFiles('tests/requirements.txt') }}
       - run: make test
+
+  test-other-os:
+    name: test-${{ matrix.os }}
+    runs-on: ubuntu-latest
+    container: potyarkin/cirrus-run
+    strategy:
+      matrix:
+        os:
+          - freebsd
+          - macos
+    env:
+      CIRRUS_API_TOKEN: ${{ secrets.CIRRUS_API_TOKEN }}
+      CIRRUS_GITHUB_REPO: sio/.cirrus-ci-jobs
+      CIRRUS_SHOW_BUILD_LOG: always
+    steps:
+      - uses: actions/checkout@v1
+      - run: cirrus-run .ci/cirrus-${{ matrix.os }}.yml.j2

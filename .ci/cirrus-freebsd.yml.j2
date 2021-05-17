@@ -1,0 +1,33 @@
+task:
+  name: 'ci/cirrusci: test-freebsd'
+  freebsd_instance:
+    image_family: freebsd-12-2
+  env:
+    SED: gsed
+    PIP_CACHE_DIR: $CIRRUS_WORKING_DIR/cache/pip
+    # VENVDIR should not be cached: Cirrus CI drops bin/python for some reason when saving cache
+    CLONE_SHA: "{{ GITHUB_SHA }}"
+    CLONE_URL: "{{ GITHUB_SERVER_URL }}/{{ GITHUB_REPOSITORY }}.git"
+  before_script:
+    - pkg update
+    - pkg install -y
+        python3
+        gmake
+        curl
+        coreutils
+        bash
+        gsed
+        git
+    - ln -s /usr/local/bin/gsha256sum /bin/sha256sum
+    - pw useradd -n testuser -m -w random
+    - chown -R testuser .
+  clone_script:
+    - git clone "$CLONE_URL" .
+    - git reset --hard "$CLONE_SHA"
+  venv_cache:
+    folder: cache
+    fingerprint_script:
+      - echo "Cache ID: 1"
+      - cat tests/requirements.txt
+  test_script:
+    - su testuser -c 'gmake test'
