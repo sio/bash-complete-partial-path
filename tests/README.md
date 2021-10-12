@@ -54,7 +54,7 @@ Automated tests are continuously executed after each push to this repo.
     - Debian 12: bash 5.1, sed 4.8 *(Debian Bookworm is the testing branch of
       Debian, package versions are not frozen and may be updated)*
 - **macOS** tests are executed in [virtual environment] provided by [Cirrus CI]:
-    - macOS 10.15: bash 5.0, sed 4.8 *(these numbers will change - packages
+    - macOS Big Sur: bash 5.1, sed 4.8 *(these numbers will change - packages
       are automatically updated to the latest version in each CI run)*
 - **FreeBSD** tests are executed in Google Cloud Platfom [VM images] on
   infrastructure provided by [Cirrus CI]:

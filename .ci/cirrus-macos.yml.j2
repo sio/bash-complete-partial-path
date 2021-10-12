@@ -1,7 +1,7 @@
 task:
   name: 'ci/cirrusci: test-macos'
   osx_instance:
-    image: catalina-base
+    image: big-sur-base
   env:
     SED: gsed
     PIP_CACHE_DIR: $CIRRUS_WORKING_DIR/cache/pip
@@ -14,7 +14,7 @@ task:
   venv_cache:
     folder: cache
     fingerprint_script:
-      - echo "Cache ID: macOS v1"
+      - echo "Cache ID: macOS Big Sur"
       - cat tests/requirements.txt
   before_script:
     - brew install coreutils gnu-sed bash make
