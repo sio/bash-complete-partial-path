@@ -58,7 +58,7 @@ Automated tests are continuously executed after each push to this repo.
       are automatically updated to the latest version in each CI run)*
 - **FreeBSD** tests are executed in Google Cloud Platfom [VM images] on
   infrastructure provided by [Cirrus CI]:
-    - FreeBSD 12.1: bash 5.0, sed 4.8 *(automatically updated in each CI run)*
+    - FreeBSD 12.2: bash 5.1, sed 4.8 *(automatically updated in each CI run)*
 
 [GitHub Actions]: https://github.com/features/actions
 [Docker containers]: docker/README.md
