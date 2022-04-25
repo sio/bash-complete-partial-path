@@ -20,7 +20,6 @@ task:
         git
     - ln -s /usr/local/bin/gsha256sum /bin/sha256sum
     - pw useradd -n testuser -m -w random
-    - chown -R testuser .
   clone_script:
     - git clone "$CLONE_URL" .
     - git reset --hard "$CLONE_SHA"
@@ -30,4 +29,5 @@ task:
       - echo "Cache ID: 1"
       - cat tests/requirements.txt
   test_script:
+    - chown -R testuser .
     - su testuser -c 'gmake test'
