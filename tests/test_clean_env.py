@@ -32,12 +32,16 @@ def test_env_clean():
         'BASHOPTS',   # - meant to be modified by _bcpp
         'BASH_ARGC',  # - volatile, modified almost always
         'BASH_ARGV',  # - volatile, modified almost always
+        'PIPESTATUS', # - volatile: https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
+        '_',          # - volatile: https://askubuntu.com/questions/1198935
     }
 
     bash = BashSession()
     before = bash.execute(cmd_show_env)
     for cmd in STARTUP:
         bash.execute(cmd)
+    bash.complete('cd /u')
+    bash.complete('ls /')
     after = bash.execute(cmd_show_env)
 
     for line in difflib.Differ().compare(before.splitlines(), after.splitlines()):
