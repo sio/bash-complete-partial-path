@@ -73,7 +73,7 @@ When you fork this repository Linux tests will be automatically picked up by
 GitHub Actions, but FreeBSD/macOS tests are executed on another platform which
 will require a one-time setup.
 
-[This document](https://github.com/libvirt/libvirt/tree/master/ci) describes
+[This document](https://github.com/libvirt/libvirt/blob/master/ci/README.rst) describes
 the steps required to configure Cirrus CI integration. Authors of the document use
 GitLab, but the only difference will be that instead of "CI/CD Variables" you
 will need to configure Repository Secrets (menu path: Settings / Secrets / Actions)
