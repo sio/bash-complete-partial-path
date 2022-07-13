@@ -45,7 +45,7 @@ jobs:
           - macos
     env:
       CIRRUS_API_TOKEN: ${{ secrets.CIRRUS_API_TOKEN }}
-      CIRRUS_GITHUB_REPO: sio/.cirrus-ci-jobs
+      CIRRUS_GITHUB_REPO: ${{ secrets.CIRRUS_GITHUB_REPO }}
       CIRRUS_SHOW_BUILD_LOG: always
     steps:
       - uses: actions/checkout@v1
