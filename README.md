@@ -30,11 +30,12 @@ To enable the described behavior source [**this file**][main] from your
 
 Completion functions have been tested and reported to work on:
 
-- Linux (Debian 9,10)
+- Linux (Debian 9, 10, 11)
 - macOS (requires gnu-sed from brew)
-- Windows (MSYS)
+- Windows (msys2, Git for Windows)
 
-[Automated tests](tests/README.md) are performed on Linux, FreeBSD and macOS.
+[Automated tests](tests/README.md) are continuously executed
+on Linux, FreeBSD, macOS and Windows (msys2).
 
 
 ## Installation and updating

@@ -59,6 +59,10 @@ Automated tests are continuously executed after each push to this repo.
 - **FreeBSD** tests are executed in Google Cloud Platfom [VM images] on
   infrastructure provided by [Cirrus CI]:
     - FreeBSD 12.2: bash 5.1, sed 4.8 *(automatically updated in each CI run)*
+- **Windows** is not a native platform for bash, and there are several
+  compatibility layers people use to work around that (msys2, cygwin, WSL).
+  Currently continuous integration tests are executed only on **msys2**
+  provided by [GitHub Actions].
 
 [GitHub Actions]: https://github.com/features/actions
 [Docker containers]: docker/README.md
