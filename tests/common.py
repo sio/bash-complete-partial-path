@@ -6,7 +6,9 @@ import os
 import platform
 import re
 import shlex
+import sys
 from itertools import chain
+from pathlib import Path
 
 import pexpect
 
@@ -168,7 +170,16 @@ class CompletionResult:
         return item in self.variants
 
     def __eq__(self, other):
-        if isinstance(other, str):
+        if isinstance(other, str) and sys.platform in {'win32', 'cygwin'}:
+            for self_word, other_word in zip(*(shlex.split(x) for x in (str(self), other))):
+                if self_word == other_word:
+                    continue
+                self_path, other_path = Path(self_word), Path(other_word)
+                if other_path.exists():
+                    return other_path.samefile(self_path)
+                return False
+            return True
+        elif isinstance(other, str):
             return str(self) == other
         elif isinstance(other, type(self)):
             return (self._variants == other._variants and
