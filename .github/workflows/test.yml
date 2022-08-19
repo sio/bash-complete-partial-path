@@ -50,3 +50,23 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: cirrus-run .ci/cirrus-${{ matrix.os }}.yml.j2
+
+  test-msys2:
+    runs-on: windows-latest
+    env:
+      PIP_CACHE_DIR: cache/pip
+    defaults:
+      run:
+        shell: C:\msys64\usr\bin\bash.exe {0}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: cache
+          key: cache-v1-${{ runner.os }}-msys2-${{ hashFiles('tests/requirements.txt') }}
+      - name: make test
+        run: |-
+          pacman --noconfirm -Sy make python3
+          make test
+        env:
+          PATH: '/usr/local/bin:/usr/bin:/bin'
