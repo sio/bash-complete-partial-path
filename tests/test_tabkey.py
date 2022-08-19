@@ -21,7 +21,7 @@ class TestShortcuts:
             assert completion == next_cycle, 'tabs: {}, old: {}, new: {}'.format(
                                                 tabs, completion.selected, next_cycle.selected)
 
-    @settings(deadline=1000, max_examples=10)
+    @settings(deadline=None, max_examples=10)
     @given(forward = st.integers(min_value=1, max_value=15),
            backward = st.integers(min_value=1, max_value=15))
     def test_shift_tab(self, bash, log, forward, backward):
