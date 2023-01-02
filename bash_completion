@@ -167,13 +167,19 @@ _bcpp_complete() {
     _bcpp_silent_bg _bcpp_compgen "$WILDCARDS" "$pipe"
     while read -r -d $'\n' LINE
     do
-        if [[ "_$ACTION" == "_directory" && ! -d "$LINE" ]]
-        then  # skip non-directory paths when looking for directory
-            continue
-        fi
         if [[ -z "$LINE" ]]
         then  # skip empty suggestions
             continue
+        fi
+        if [[ ! -d "$LINE" ]]
+        then
+            if [[ "_$ACTION" == "_directory" ]]
+            then  # skip non-directory paths when looking for directory
+                continue
+            fi
+        elif [[ "${LINE: -1}" != "/" ]]
+        then  # always add trailing slash to directories
+            LINE="$LINE/"
         fi
         if [[ -z "$QUOTE"  ]]
         then  # escape special characters unless user has opened a quote
