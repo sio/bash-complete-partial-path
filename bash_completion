@@ -104,7 +104,7 @@ _bcpp_compgen() {
 # argument to specify desired completion behavior
 #
 _bcpp_complete() {
-    local WILDCARDS ACTION LINE OPTION INPUT QUOTE
+    local WILDCARDS ACTION LINE OPTION INPUT QUOTE SUBDIRS
 
     ACTION="$1"
     if [[ "_$1" == "_-d" ]]
@@ -136,17 +136,16 @@ _bcpp_complete() {
     # If input is already a valid path, do not try to be clever
     if [[ -e "$INPUT" ]]
     then
-        if [[ "_$ACTION" == "_directory" ]]
+        COMPREPLY=($(compgen -S / -d "$INPUT"))
+        if [[ "_$ACTION" != "_directory" ]]
         then
-            OPTION="dirnames"
-        else
-            OPTION="filenames"
-        fi
-        if [[ -d "$INPUT" && "${INPUT: -1}" != '/' ]]
-        then
-            COMPREPLY=("$INPUT/")
-        else
-            COMPREPLY=($(compgen -o "$OPTION" "$INPUT"))
+            SUBDIRS=($(compgen -d "$INPUT"))
+            while read -r file
+            do
+                # FIXME: https://stackoverflow.com/a/14367368/11248508
+                [[ " $SUBDIRS " == *" $file "* ]] && continue
+                COMPREPLY+=("$file")
+            done < <(compgen -f "$INPUT")
         fi
         return
     fi
