@@ -2,6 +2,7 @@
 Edge case for directory names containing whitespace
 
 https://github.com/sio/bash-complete-partial-path/issues/23
+https://asciinema.org/a/549127
 '''
 
 import pytest

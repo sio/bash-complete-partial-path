@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# bash-complete-partial-path                                    v1.0.0
+# bash-complete-partial-path                                    v1.1.0-dev
 #
 # Zsh-like expansion of incomplete file paths for Bash.
 # Source this file from your ~/.bashrc and use `_bcpp --defaults`
@@ -146,7 +146,12 @@ _bcpp_complete() {
         then
             COMPREPLY=("$INPUT/")
         else
-            COMPREPLY=($(compgen -o "$OPTION" "$INPUT"))
+            readarray -t COMPREPLY < <(compgen -o "$OPTION" "$INPUT")
+            local i
+            for i in "${!COMPREPLY[@]}"
+            do
+                COMPREPLY[i]="$(printf "%q" "${COMPREPLY[i]}")"
+            done
         fi
         return
     fi
