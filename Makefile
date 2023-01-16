@@ -29,7 +29,7 @@ deps:
 	bash --version
 
 
-include Makefile.venv
+-include Makefile.venv
 Makefile.venv:
 	curl \
 		-o Makefile.fetched \
