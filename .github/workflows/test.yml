@@ -102,4 +102,5 @@ jobs:
     container: koalaman/shellcheck-alpine
     steps:
       - uses: actions/checkout@v3
-      - run: shellcheck bash_completion
+      - run: apk update; apk add make
+      - run: make lint
