@@ -54,7 +54,7 @@ _bcpp_sed_detect() {
 _bcpp_put_wildcards() {
     local PROCESSED TILDE_EXPANSION INPUT
 
-    INPUT="$@"
+    INPUT="$*"
     PROCESSED=$( \
         echo "$INPUT" | \
         $_BCPP_SED \
@@ -203,7 +203,7 @@ _bcpp() {
     DEFAULT="--files --dirs --cooperate --nocase --readline"
     ALL="--files --dirs --cooperate --nocase --readline"
     USAGE=(
-        "Usage: $FUNCNAME OPTIONS"
+        "Usage: ${FUNCNAME[0]} OPTIONS"
         "    Manage enhanced path completion in bash"
         ""
         "Options:"
@@ -253,8 +253,10 @@ _bcpp() {
     do
         case "$ARG" in
             --defaults)
+                # shellcheck disable=SC2086
                 set -- "$@" $DEFAULT ;;
             --all)
+                # shellcheck disable=SC2086
                 set -- "$@" $ALL ;;
         esac
     done
@@ -292,7 +294,7 @@ _bcpp() {
     done
 
     # Special cases that terminate function
-    if [[ "$KEYS" == *H* || -z "$@" ]]  # --help|--usage|-h
+    if [[ "$KEYS" == *H* || -z "$*" ]]  # --help|--usage|-h
     then
         printf "%s\n" "${USAGE[@]}"
         return 0
@@ -300,8 +302,8 @@ _bcpp() {
     if [[ "$KEYS" == *U* ]]  # unknown arguments
     then
         echo -e \
-            "Unknown arguments: ${UNKNOWN[@]}" \
-            "\nRefer to \`$FUNCNAME --help\` for more information" \
+            "Unknown arguments: ${UNKNOWN[*]}" \
+            "\nRefer to \`${FUNCNAME[0]} --help\` for more information" \
             >&2
         return 1
     fi
@@ -315,7 +317,7 @@ _bcpp() {
 
         local _bcpp_filedir_original_code
         _bcpp_filedir_original_code=$(declare -f _filedir|tail -n+2)
-        if [[ ! -z "$_bcpp_filedir_original_code" ]]
+        if [[ -n "$_bcpp_filedir_original_code" ]]
         then
             type _bcpp_filedir_original &>/dev/null || \
                 eval "_bcpp_filedir_original() $_bcpp_filedir_original_code"
@@ -327,7 +329,7 @@ _bcpp() {
 
         local _bcpp_filedir_xspec_original_code
         _bcpp_filedir_xspec_original_code=$(declare -f _filedir_xspec|tail -n+2)
-        if [[ ! -z "$_bcpp_filedir_xspec_original_code" ]]
+        if [[ -n "$_bcpp_filedir_xspec_original_code" ]]
         then
             type _bcpp_filedir_xspec_original &>/dev/null || \
                 eval "_bcpp_filedir_xspec_original() $_bcpp_filedir_xspec_original_code"

@@ -1,0 +1,2 @@
+# Ignore unreachable code chunks (_filedir_original)
+disable=SC2317

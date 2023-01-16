@@ -12,8 +12,8 @@ test: deps venv
 
 
 lint:
-	shellcheck --version
-	shellcheck bash_completion
+	@shellcheck --version
+	shellcheck --color=always bash_completion
 
 
 clean: clean-venv
