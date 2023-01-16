@@ -55,6 +55,7 @@ def read_git_ref(name):
 
 def test_readme_changelog():
     '''Compare version numbers in main script and CHANGELOG'''
+    skip_development_versions()
     app_version = read_version(BCPP, lines=5)
     changelog_version = read_version(CHANGELOG, lines=5)
     assert app_version == changelog_version
