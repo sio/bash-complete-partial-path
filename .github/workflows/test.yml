@@ -27,8 +27,8 @@ jobs:
     env:
       PIP_CACHE_DIR: cache/pip
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
         with:
           path: cache
           key: cache-v1-${{ runner.os }}-${{ matrix.image }}-${{ hashFiles('tests/requirements.txt') }}
@@ -48,7 +48,7 @@ jobs:
       CIRRUS_GITHUB_REPO: ${{ secrets.CIRRUS_GITHUB_REPO }}
       CIRRUS_SHOW_BUILD_LOG: always
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - run: cirrus-run .ci/cirrus-${{ matrix.os }}.yml.j2
 
   test-msys2:
@@ -59,8 +59,8 @@ jobs:
       run:
         shell: C:\msys64\usr\bin\bash.exe -xeuo pipefail {0}
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
         with:
           path: cache
           key: cache-v1-${{ runner.os }}-msys2-${{ hashFiles('tests/requirements.txt') }}
