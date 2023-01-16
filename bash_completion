@@ -104,7 +104,7 @@ _bcpp_compgen() {
 # argument to specify desired completion behavior
 #
 _bcpp_complete() {
-    local WILDCARDS ACTION LINE OPTION INPUT QUOTE
+    local WILDCARDS ACTION LINE OPTION INPUT QUOTE SUBDIRS
 
     ACTION="$1"
     if [[ "_$1" == "_-d" ]]
@@ -136,17 +136,16 @@ _bcpp_complete() {
     # If input is already a valid path, do not try to be clever
     if [[ -e "$INPUT" ]]
     then
-        if [[ "_$ACTION" == "_directory" ]]
+        COMPREPLY=($(compgen -S / -d "$INPUT"))
+        if [[ "_$ACTION" != "_directory" ]]
         then
-            OPTION="dirnames"
-        else
-            OPTION="filenames"
-        fi
-        if [[ -d "$INPUT" && "${INPUT: -1}" != '/' ]]
-        then
-            COMPREPLY=("$INPUT/")
-        else
-            COMPREPLY=($(compgen -o "$OPTION" "$INPUT"))
+            SUBDIRS=($(compgen -d "$INPUT"))
+            while read -r file
+            do
+                # FIXME: https://stackoverflow.com/a/14367368/11248508
+                [[ " $SUBDIRS " == *" $file "* ]] && continue
+                COMPREPLY+=("$file")
+            done < <(compgen -f "$INPUT")
         fi
         return
     fi
@@ -167,13 +166,19 @@ _bcpp_complete() {
     _bcpp_silent_bg _bcpp_compgen "$WILDCARDS" "$pipe"
     while read -r -d $'\n' LINE
     do
-        if [[ "_$ACTION" == "_directory" && ! -d "$LINE" ]]
-        then  # skip non-directory paths when looking for directory
-            continue
-        fi
         if [[ -z "$LINE" ]]
         then  # skip empty suggestions
             continue
+        fi
+        if [[ ! -d "$LINE" ]]
+        then
+            if [[ "_$ACTION" == "_directory" ]]
+            then  # skip non-directory paths when looking for directory
+                continue
+            fi
+        elif [[ "${LINE: -1}" != "/" ]]
+        then  # always add trailing slash to directories
+            LINE="$LINE/"
         fi
         if [[ -z "$QUOTE"  ]]
         then  # escape special characters unless user has opened a quote
