@@ -1,7 +1,7 @@
 task:
   name: 'ci/cirrusci: test-macos'
-  osx_instance:
-    image: big-sur-base
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-ventura-base:latest
   env:
     SED: gsed
     PIP_CACHE_DIR: $CIRRUS_WORKING_DIR/cache/pip
