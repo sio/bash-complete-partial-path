@@ -107,7 +107,7 @@ The following environment variables affect behavior of test runner:
 Check if the list above is up to date:
 
 ```
-$ git grep -woEh 'BCPP\w+' tests/|sort -u
+$ git grep -woPh 'BCPP\w+' tests/|sort -u
 ```
 
 ### Passing extra arguments to pytest
