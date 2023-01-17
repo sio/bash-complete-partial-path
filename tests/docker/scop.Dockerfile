@@ -1,6 +1,6 @@
 # Test environment that provides https://github.com/scop/bash-completion
 
-FROM ghcr.io/sio/bash-complete-partial-path:debian-10
+FROM ghcr.io/sio/bash-complete-partial-path:debian-12
 
 RUN \
     apt-get install -y bash-completion && \
