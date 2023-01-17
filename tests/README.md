@@ -30,7 +30,7 @@ environment for Python automatically, no system-wide changes to Python
 installation are made.
 
 Because of unconventional command line implementation automated tests can not
-be executed on Windows. Thanks to recent developments ([ConPty]) that may
+be executed natively on Windows. Thanks to recent developments ([ConPty]) that may
 become possible in the future - if/when Windows will be fully supported by
 pexpect.
 
