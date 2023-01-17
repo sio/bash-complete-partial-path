@@ -51,14 +51,14 @@ Automated tests are continuously executed after each push to this repo.
     - Debian 9: bash 4.4, sed 4.4
     - Debian 10: bash 5.0, sed 4.7
     - Debian 11: bash 5.1, sed 4.7
-    - Debian 12: bash 5.1, sed 4.8 *(Debian Bookworm is the testing branch of
+    - Debian 12: bash 5.2, sed 4.9 *(Debian Bookworm is the testing branch of
       Debian, package versions are not frozen and may be updated)*
 - **macOS** tests are executed in [virtual environment] provided by [Cirrus CI]:
-    - macOS Big Sur: bash 5.1, sed 4.8 *(these numbers will change - packages
+    - macOS Ventura: bash 5.2, sed 4.9 *(these numbers will change - packages
       are automatically updated to the latest version in each CI run)*
 - **FreeBSD** tests are executed in Google Cloud Platfom [VM images] on
   infrastructure provided by [Cirrus CI]:
-    - FreeBSD 12.2: bash 5.1, sed 4.8 *(automatically updated in each CI run)*
+    - FreeBSD 12.2: bash 5.2, sed 4.9 *(automatically updated in each CI run)*
 - **Windows** is not a native platform for bash, and there are several
   compatibility layers people use to work around that (msys2, cygwin, WSL).
   Currently continuous integration tests are executed only on **msys2**
