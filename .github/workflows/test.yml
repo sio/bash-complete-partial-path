@@ -5,6 +5,7 @@ on:
       - '**.md'
       - '.git*'
   pull_request:
+  worflow_dispatch:
   schedule:
     - cron: '45 3 5,15,25 * *'
 
