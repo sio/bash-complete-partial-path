@@ -163,7 +163,7 @@ _bcpp_complete() {
     local pipe
     pipe="$_BCPP_FIFO"
     [[ -z "$pipe" ]] && return 1  # fail on empty filename
-    command mkfifo -m 600 "$pipe"
+    command mkfifo "$pipe"
 
     local monitor
     [[ "$-" == *m* ]] && monitor=yes || monitor=no
