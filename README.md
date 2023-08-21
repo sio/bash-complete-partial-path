@@ -10,7 +10,7 @@ produce nothing by default, but will be expanded to `cd /usr/share/applications`
 if you've configured bash to load this file.
 
 Introductory overview is available at
-[author's blog](https://potyarkin.ml/posts/2018/enhanced-file-path-completion-in-bash-like-in-zsh/).
+[author's blog](https://potyarkin.com/posts/2018/enhanced-file-path-completion-in-bash-like-in-zsh/).
 
 Watch a demo screencast to see this feature in action:
 
