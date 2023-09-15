@@ -66,19 +66,6 @@ jobs:
           path: cache
           key: cache-v1-${{ runner.os }}-msys2-${{ hashFiles('tests/requirements.txt') }}
 
-      - name: Install static build of curl
-        run: |-
-          pacman --noconfirm -Sy unzip
-          mkdir -p /tmp/curl /usr/local/bin
-          cd /tmp/curl
-          curl -sSL "https://curl.se/windows/dl-7.87.0/curl-7.87.0-win64-mingw.zip" -o /tmp/curl.zip
-          unzip /tmp/curl.zip
-          mv curl*/bin/curl.exe curl*/bin/*.crt /usr/local/bin/
-          which curl
-          curl --version
-        env:
-          PATH: '/usr/local/bin:/usr/bin:/bin'
-
       - name: Upgrade Msys2 environment
         run: |-
           exec pacman --noconfirm -Syu
