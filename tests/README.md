@@ -58,7 +58,7 @@ Automated tests are continuously executed after each push to this repo.
       are automatically updated to the latest version in each CI run)*
 - **FreeBSD** tests are executed in Google Cloud Platfom [VM images] on
   infrastructure provided by [Cirrus CI]:
-    - FreeBSD 13.1: bash 5.2, sed 4.9 *(automatically updated in each CI run)*
+    - FreeBSD 14.0: bash 5.2, sed 4.9 *(automatically updated in each CI run)*
 - **Windows** is not a native platform for bash, and there are several
   compatibility layers people use to work around that (msys2, cygwin, WSL).
   Currently continuous integration tests are executed only on **msys2**
