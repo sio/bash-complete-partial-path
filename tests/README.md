@@ -47,7 +47,6 @@ Automated tests are continuously executed after each push to this repo.
   infrastructure provided by [GitHub Actions]. The following configurations are
   being tested:
     - Centos 7: bash 4.2, sed 4.2
-    - Debian 8: bash 4.3, sed 4.2
     - Debian 9: bash 4.4, sed 4.4
     - Debian 10: bash 5.0, sed 4.7
     - Debian 11: bash 5.1, sed 4.7
