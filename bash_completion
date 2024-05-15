@@ -321,6 +321,8 @@ _bcpp() {
         then
             type _bcpp_filedir_original &>/dev/null || \
                 eval "_bcpp_filedir_original() $_bcpp_filedir_original_code"
+
+            # shellcheck disable=SC2329 # invoked from outside of this script
             _filedir() {
                 _bcpp_filedir_original "$@"
                 [ "${#COMPREPLY[@]}" -eq 0 ] && _bcpp_complete "$@"
@@ -333,6 +335,8 @@ _bcpp() {
         then
             type _bcpp_filedir_xspec_original &>/dev/null || \
                 eval "_bcpp_filedir_xspec_original() $_bcpp_filedir_xspec_original_code"
+
+            # shellcheck disable=SC2329 # invoked from outside of this script
             _filedir_xspec() {
                 _bcpp_filedir_xspec_original "$@"
                 [ "${#COMPREPLY[@]}" -eq 0 ] && _bcpp_complete "$@"
