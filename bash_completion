@@ -313,7 +313,7 @@ _bcpp() {
     if [[ "$KEYS" == *o* ]]  # --cooperate|--override
     then
         local DYNAMIC
-        DYNAMIC=$(complete -p|grep -E -- '-D.*_completion_loader|_completion_loader.*-D')
+        DYNAMIC=$(complete -p|grep -E -- '-D.*_completion_loader|_completion_loader.*-D|_python_argcomplete_global.*-D')
 
         local _bcpp_filedir_original_code
         _bcpp_filedir_original_code=$(declare -f _filedir|tail -n+2)
